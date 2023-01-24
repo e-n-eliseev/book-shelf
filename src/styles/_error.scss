@@ -1,0 +1,14 @@
+
+.error {
+    position: fixed;
+    background-color: #ff6333;
+    z-index: 5;
+    top: 50%;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #ff6333,
+      0 0 50px #ff6333,
+      0 0 80px #ff6333;
+      @include font(700,$h2-fs);
+}
