@@ -1,0 +1,14 @@
+@import './reset';
+@import './vars';
+@import './mixins';
+
+.App {
+    height: 100%;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+@import './header';
+@import './mainPage';
+@import './footer';
