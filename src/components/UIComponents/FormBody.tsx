@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import { IForm } from '../../types/types';
 import { FC } from "react";
 
+
 const FormBody: FC<IForm> = ({ children, onSubmit }) => {
 
     return (

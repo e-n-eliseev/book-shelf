@@ -44,6 +44,11 @@
             position: absolute;
             color: $invalid-color;
             text-align: center;
+            text-decoration: underline;
+            &::before {
+                display: inline;
+                content: "⚠ ";
+            }
         }
     }
 }

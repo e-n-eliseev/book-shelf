@@ -1,57 +1,61 @@
 import { Button, TextField } from "@mui/material";
-import { ChangeEvent, useState } from "react";
 import FormBody from "../../UIComponents/FormBody";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import IconButton from '@mui/material/IconButton';
 import { Tooltip } from "@mui/material";
-import { ISubmit } from "../../../types/types";
+import { ILogIn, ISubmit } from "../../../types/types";
 import { FC } from "react";
+import { useForm } from "react-hook-form";
+import { emailValidation, passwordValidation } from "../../../helpers/vars";
 
 const LoginForm: FC<ISubmit> = ({ onSubmit }) => {
-    //локально сохраняем данные инпутов
-    const [login, setLogin] = useState("");
-    const [pass, setPass] = useState("");
-
-    //обработчики изменения инпутов
-    const handleChangeLogin = (event: ChangeEvent<HTMLInputElement>): void => {
-        setLogin(event.target.value);
-    };
-
-
-    const handleChangePass = (event: ChangeEvent<HTMLInputElement>): void => {
-        setPass(event.target.value);
-    };
-
-
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isValid }
+    } = useForm<ILogIn>({
+        mode: "all"
+    });
     //обработчик отправки формы
-    const handleSubmit = (event: ChangeEvent<HTMLInputElement>): void => {
-        event.preventDefault();
+    const onSubmitForm = (data: ILogIn) => {
+        console.log(data.login, data.pass)
+        const { login, pass } = data
         onSubmit({ login, pass });
-        setLogin("");
-        setPass("");
+        reset();
     };
 
     return (
-        <FormBody onSubmit={handleSubmit}>
+        <FormBody onSubmit={handleSubmit(onSubmitForm)}>
             <div className="logIn__input-wrapper">
                 <TextField
                     type="email"
-                    name="email"
-                    value={login}
-                    onChange={handleChangeLogin}
                     label="Почта"
                     variant="outlined"
+                    {...register("login", {
+                        required: 'Поле обязательно для заполнения!',
+                        pattern: {
+                            value: emailValidation,
+                            message: 'Введите корректный адрес электронной почты'
+                        }
+                    })}
                 />
+                {errors?.login && <p className="logIn__input-error">{errors?.login?.message}</p>}
             </div>
             <div className="logIn__input-wrapper">
                 <TextField
                     type="password"
-                    name="password"
-                    value={pass}
-                    onChange={handleChangePass}
                     label="Пароль"
                     variant="outlined"
+                    {...register("pass", {
+                        required: 'Пароль не может быть пустым',
+                        pattern: {
+                            value: passwordValidation,
+                            message: 'Невалидный пароль (см.подсказку)'
+                        }
+                    })}
                 />
+                {errors?.pass && <p className="logIn__input-error">{errors?.pass?.message}</p>}
             </div>
             <IconButton color="primary"
                 sx={{
@@ -75,6 +79,7 @@ const LoginForm: FC<ISubmit> = ({ onSubmit }) => {
                     borderRadius: "8px"
                 }}
                 variant='contained'
+                disabled={!isValid}
             >
                 Войти!
             </Button>
