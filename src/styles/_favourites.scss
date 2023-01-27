@@ -1,0 +1,64 @@
+.favourites {
+    @extend %grid-wrapper;
+    &__content {
+        position: relative;
+        @extend %grid-content;
+        @extend %border;
+        margin: 50px;
+        background-color: $fourth-bg-color;
+        gap: 20px;
+        padding: 50px 150px;
+        align-items: flex-start;
+    }
+
+    &__heading {
+        @include font( 700, $h1-fs);
+        color: $primary-bg-color;
+        align-self: center
+    }
+
+    &__favourites,&__buy,&__recent {
+        width: 100%;
+        &-heading {
+            @include font( 700, $h2-fs);
+            text-align: left;
+            color: $primary-bg-color;
+            margin-bottom: 20px;
+            border-bottom: solid 2px $primary-bg-color;
+        }
+        &-list{
+            min-height: 300px;
+            padding: 20px;
+            border: solid 3px $secondary-bg-color;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            background: $third-bg-color;
+            @extend %shadow; 
+            @include font( 700, $h3-fs);
+            color: $primary-bg-color;
+            flex-wrap: wrap;
+        }
+    }
+}
+@media (max-width:900px){
+    .favourites{
+        &__content {
+            padding: 30px 10px;
+        }
+    }
+}
+@media (max-width:550px){
+    .favourites{
+        &__heading {
+font-size: $h2-fs;
+        }
+        &__favourites,&__buy,&__recent {
+            &-heading {
+font-size: $p1-fs;
+            }
+    }
+}
+}

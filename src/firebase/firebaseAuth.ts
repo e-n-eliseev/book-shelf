@@ -1,5 +1,7 @@
 import {
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -22,4 +24,18 @@ export const logIn = async (email: string, pass: string) => {
 //выход
 export const logOut = async () => {
   await signOut(auth);
+};
+
+export const reauthenticate = async (password: string) => {
+  const credential = EmailAuthProvider.credential(
+    `${auth.currentUser!.email}`,
+    password
+  );
+  if (auth.currentUser) {
+    const result = await reauthenticateWithCredential(
+      auth.currentUser,
+      credential
+    );
+    return result;
+  }
 };

@@ -42,12 +42,12 @@ const ProfileBtn: FC = () => {
                 onClose={handleCloseUserMenu}
             >
                 <MenuItem onClick={handleCloseUserMenu}>
-                    <Link className="header__profile-link" to={"/"}>
+                    <Link className="header__profile-link" to={"/profilepage"}>
                         Профиль
                     </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
-                    <Link className="header__profile-link" to={"/"}>
+                    <Link className="header__profile-link" to={"/favourites"}>
                         Избранное
                     </Link>
                 </MenuItem>

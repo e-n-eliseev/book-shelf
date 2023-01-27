@@ -1,0 +1,24 @@
+.page-not-found{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    &__heading, &__text{
+        color: $secondary-text-color;
+    }
+    &__heading{
+        @include font(700,$h1-fs);
+    }
+    &__text{
+    display: flex;
+    align-items: center;
+    @include font(500,$h2-fs);
+    }
+    &__img{
+        width: 375px;
+        height: 375px;
+        background-color: $primary-text-color;
+    }
+}

@@ -1,5 +1,5 @@
 
-import { FC } from "react";
+import { FC, memo } from "react";
 import { IAuthProps } from '../../types/types';
 import HeaderLogo from './headerLogo/HeaderLogo';
 import HeaderHeading from './headerHeading/HeaderHeading';
@@ -7,7 +7,7 @@ import HeaderGenre from './headerGenre/HeaderGenre';
 import ProfileBtn from "./profileBtn/ProfileBtn";
 import LogInBtn from "./LogInBtn/LoginBtn";
 
-export const Header: FC<IAuthProps> = ({ authed }) => {
+export const Header: FC<IAuthProps> = memo(({ authed }) => {
     return (
         <header className="header">
             <div className="header__content">
@@ -25,4 +25,4 @@ export const Header: FC<IAuthProps> = ({ authed }) => {
             </div>
         </header >
     );
-};
+});

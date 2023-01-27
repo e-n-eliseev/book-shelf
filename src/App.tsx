@@ -8,6 +8,11 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebaseAuth';
 import { PublicRoute } from './components/publicRoute/PublicRoute';
 import LogIn from './components/logIn/LogIn';
+import { PrivateRoute } from './components/privateRoute/PrivateRoute';
+import ProfilePage from './components/profilePage/ProfilePage';
+import FavouritesPage from './components/favouritesPage/FavouritesPage';
+import PageNotFound from './components/404/PageNotFound';
+import { GenreList } from './components/genreList/GenreList';
 
 function App() {
 
@@ -43,6 +48,14 @@ function App() {
         <Route path="/signup" element={<PublicRoute authed={authed} />}>
           <Route path="" element={<LogIn authed />} />
         </Route>
+        <Route path="/genres/:id" element={<GenreList />} />
+        <Route path="/profilepage" element={<PrivateRoute authed={authed} />} >
+          <Route path="" element={<ProfilePage />} />
+        </Route>
+        <Route path="/favourites" element={<PrivateRoute authed={authed} />} >
+          <Route path="" element={<FavouritesPage />} />
+        </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />
     </div>
