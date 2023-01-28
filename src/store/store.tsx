@@ -1,7 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import common from "./slices/commonSlice";
+import getBooks from "./slices/getBookSlice";
+
 export const store = configureStore({
-  reducer: { common },
+  reducer: {
+    common,
+    getBooks
+  },
 })
 
 

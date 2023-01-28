@@ -11,10 +11,19 @@
         margin: 0 0 50px 0;
     }
     &__content{
+        width: 100%;
         display: flex;
         gap: 20px;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-around;
+    }
+}
+
+@media (max-width:900px){
+    .sliders{
+        &__content{
+            justify-content: center;
+        }
     }
 }
 

@@ -17,10 +17,10 @@ export enum ILoadingStatus {
 
 export interface IStatus {
   loading: string;
-  error: null | string;
+  error?: null | string;
 }
 export interface IBooksInfo {
-  books: any[];
+  books: any;
   currentBook: any;
   feedBack: Array<string>;
   searchParam: string;
@@ -74,4 +74,9 @@ export interface ISlider {
   category: string;
   images: IImage[];
   delay: number;
+}
+
+export interface IGetBook {
+  searchParam: string;
+  startIndex: number;
 }

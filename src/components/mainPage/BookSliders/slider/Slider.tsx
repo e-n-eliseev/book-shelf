@@ -83,7 +83,7 @@ const Slider: FC<ISlider> = ({ category, images, delay }) => {
                                         sx={{
                                             height: 300,
                                             display: 'block',
-                                            maxWidth: 295,
+                                            backgroundColor: "#F4F8FF",
                                             overflow: 'hidden',
                                             width: '100%',
                                         }}

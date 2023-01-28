@@ -49,6 +49,7 @@ function App() {
         <Route path="/signup" element={<PublicRoute authed={authed} />}>
           <Route path="" element={<LogIn authed />} />
         </Route>
+        <Route path="/bookslist/:id" element={<BooksList />} />
         <Route path="/genres/:id" element={<GenreList />} />
         <Route path="/genre/:genre" element={<BooksList genre={true} />} />
         <Route path="/profilepage" element={<PrivateRoute authed={authed} />} >

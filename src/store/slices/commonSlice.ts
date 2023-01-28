@@ -11,21 +11,20 @@ export const commonSlice = createSlice({
   name: "common",
   initialState,
   reducers: {
-    loading: (state: IStatus, action: PayloadAction<string>) => ({
-      loading: ILoadingStatus.PENDING,
-      error: null,
-    }),
-    error: (state: IStatus, action: PayloadAction<string>) => ({
-      loading: ILoadingStatus.ERROR,
-      error: action.payload,
-    }),
-    successLoaing: (state: IStatus, action: PayloadAction<string>) => ({
-      loading: ILoadingStatus.SUCCESS,
-      error: null,
-    }),
+    setLoading: (state: IStatus) => {
+      state.loading = ILoadingStatus.PENDING;
+      state.error = null;
+    },
+    setError: (state: IStatus, action: PayloadAction<string>) => {
+      state.loading = ILoadingStatus.ERROR;
+      state.error = action.payload;
+    },
+    setSuccessLoading: (state: IStatus) => {
+      state.loading = ILoadingStatus.SUCCESS;
+    },
   },
 });
 
-export const { loading, error, successLoaing } = commonSlice.actions;
+export const { setLoading, setError, setSuccessLoading } = commonSlice.actions;
 
 export default commonSlice.reducer;

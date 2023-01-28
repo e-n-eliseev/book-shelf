@@ -6,6 +6,7 @@ import HeaderHeading from './headerHeading/HeaderHeading';
 import HeaderGenre from './headerGenre/HeaderGenre';
 import ProfileBtn from "./profileBtn/ProfileBtn";
 import LogInBtn from "./LogInBtn/LoginBtn";
+import SearchForm from "../UIComponents/SearchForm";
 
 export const Header: FC<IAuthProps> = memo(({ authed }) => {
     return (
@@ -17,6 +18,7 @@ export const Header: FC<IAuthProps> = memo(({ authed }) => {
                     <HeaderGenre />
                 </ul>
                 <div className="header__right">
+                    <SearchForm />
                     {authed
                         ? <ProfileBtn />
                         : <LogInBtn />
