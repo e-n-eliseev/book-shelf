@@ -1,0 +1,26 @@
+.genre-item{
+    width: 327px;
+    height: 160px;
+    border-radius: 8px;
+    overflow: hidden;
+    @extend %genre-shadow;
+    position: relative;
+    border: 3px solid $secondary-bg-color;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+    background-color: $secondary-bg-color;
+    &:hover{
+        border: 3px solid $primary-bg-color;
+        @extend %genre-shadow-hover;
+        transform: scale(1.1);
+        z-index: 1;
+    }
+    &__img{
+        position: absolute;
+        width: 114%;
+        height: 114%;
+        object-fit: contain;
+        top: -6px;
+        left: -25px;
+    }
+}

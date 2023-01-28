@@ -13,6 +13,7 @@ import ProfilePage from './components/profilePage/ProfilePage';
 import FavouritesPage from './components/favouritesPage/FavouritesPage';
 import PageNotFound from './components/404/PageNotFound';
 import { GenreList } from './components/genreList/GenreList';
+import { BooksList } from './components/booksList/BooksList';
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
           <Route path="" element={<LogIn authed />} />
         </Route>
         <Route path="/genres/:id" element={<GenreList />} />
+        <Route path="/genre/:genre" element={<BooksList genre={true} />} />
         <Route path="/profilepage" element={<PrivateRoute authed={authed} />} >
           <Route path="" element={<ProfilePage />} />
         </Route>

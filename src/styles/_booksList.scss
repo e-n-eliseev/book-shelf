@@ -1,0 +1,44 @@
+.books-list {
+    @extend %grid-wrapper;
+
+    &__content {
+        @extend %grid-content;
+        color: $primary-bg-color;
+        justify-content: center;
+        background-color: $third-bg-color;
+        @extend %shadow;
+    }
+
+    &__heading {
+        @include font(700, $h1-fs);
+        margin: 0 0 50px 0;
+        text-align: center;
+
+        & span {
+            text-decoration: underline;
+            color: $secondary-bg-color;
+            font-style: italic;
+        }
+    }
+
+    &__list {
+        display: flex;
+        justify-content: center;
+        gap: 30px 20px;
+        flex-wrap: wrap;
+        flex-grow: 1;
+    }
+}
+
+@media(max-width:550px) {
+    .books-list {
+        &__heading {
+            font-size: $h3-fs;
+            margin: 0 0 20px 0;
+        }
+
+        &__list {
+            gap: 20px 10px;
+        }
+    }
+}

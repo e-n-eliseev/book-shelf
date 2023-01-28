@@ -58,3 +58,8 @@ export interface IModal {
   confirmFunction?: any;
   profile?: any;
 }
+
+export interface IGEnre {
+  key: string;
+  genre: string[];
+}
