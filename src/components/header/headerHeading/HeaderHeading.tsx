@@ -7,7 +7,7 @@ const HeaderHeading: FC = () => {
         <li className="header__heading">
             <Tooltip title="Нажмите для перехода на главную страницу ">
                 <Link className="header__link" to={"/"}>
-                    BookLib
+                    Book Shelf
                 </Link >
             </Tooltip>
         </li>

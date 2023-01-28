@@ -1,0 +1,32 @@
+.sliders{
+    padding: 54px 20px;
+    background-color: $primary-bg-color;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    @extend %border;
+    &__heading{
+        @include font(700,$h2-fs);
+        margin: 0 0 50px 0;
+    }
+    &__content{
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width:550px){
+    .sliders{
+        padding: 10px 5px;
+        &__heading{
+            font-size: $h3-fs;
+            margin: 0 0 20px 0;
+        }
+        &__content{
+            gap: 10px;
+        }
+    }
+}

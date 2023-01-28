@@ -1,3 +1,5 @@
+import { IImage } from "../types/types";
+
 export const randomBooks1 = [
   {
     kind: "books#volume",
@@ -945,3 +947,16 @@ export const randomBooks3 = [
     },
   },
 ];
+
+const adapter = (arr: any[]) =>
+  arr.reduce((acc, item) => {
+    acc.push({
+      label: item.volumeInfo.title,
+      imgPath: item.volumeInfo.imageLinks.thumbnail,
+      id: item.id,
+    });
+    return acc;
+  }, []);
+export const images1: IImage[] = adapter(randomBooks1);
+export const images2: IImage[] = adapter(randomBooks2);
+export const images3: IImage[] = adapter(randomBooks3);

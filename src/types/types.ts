@@ -63,3 +63,15 @@ export interface IGEnre {
   key: string;
   genre: string[];
 }
+
+export interface IImage {
+  id: string | number;
+  imgPath: string;
+  label: string;
+}
+
+export interface ISlider {
+  category: string;
+  images: IImage[];
+  delay: number;
+}
