@@ -6,12 +6,11 @@ import {
   signOut,
 } from "firebase/auth";
 import { getAuth } from "firebase/auth";
-import { firebaseApp } from "./firebase";
+import { doc } from "firebase/firestore";
+import { db, firebaseApp } from "./firebase";
 
 //состояние авторизации
 export const auth = getAuth(firebaseApp);
-export const userId = auth.currentUser?.uid;
-console.log(userId);
 
 //обработка  подписки
 export const signUp = async (email: string, pass: string) => {
@@ -25,6 +24,11 @@ export const logIn = async (email: string, pass: string) => {
 export const logOut = async () => {
   await signOut(auth);
 };
+
+//ссылка на документ пользователя
+export const userId = auth.currentUser?.uid;
+export const docRef = doc(db, "users", `${userId}`);
+export const docRefFavourites = doc(db, "users", `${userId}/favourites/items`);
 
 export const reauthenticate = async (password: string) => {
   const credential = EmailAuthProvider.credential(

@@ -5,8 +5,9 @@ import SubmitButtons from '../../UIComponents/SubmitButtons';
 import { phoneValidation } from "../../../helpers/vars";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { IBook1, Info, ISetState } from "../../../types/types";
-import { auth } from "../../../firebase/firebaseAuth";
+//import { auth, docRef, userId } from "../../../firebase/firebaseAuth";
 import { useForm } from "react-hook-form";
+import { auth } from "../../../firebase/firebaseAuth";
 
 
 const ChangePhoneForm: FC<ISetState> = ({ setError }) => {
@@ -25,13 +26,14 @@ const ChangePhoneForm: FC<ISetState> = ({ setError }) => {
     });
 
 
-    const userId = auth.currentUser!.uid;
+    const userId = auth.currentUser?.uid;
     const docRef = doc(db, "users", `${userId}`);
 
     useEffect(() => {
         //получаем номер телефона из базы
         getDoc(docRef)
             .then((data) => {
+                console.log(data.data()!)
                 setPhoneNumber(data.data()!.phoneNumber)
             })
             .catch((error) => {
@@ -39,12 +41,10 @@ const ChangePhoneForm: FC<ISetState> = ({ setError }) => {
             })
     }, []);
 
-
-
     const handleSubmitPhone = async (data: IBook1) => {
         setPhoneNumber(data.phoneNumber);
         setIsChanging(false);
-        await setDoc(doc(db, "users", `${userId}`), { phoneNumber: data.phoneNumber });
+        await setDoc(docRef, { phoneNumber: data.phoneNumber });
         reset();
     }
 

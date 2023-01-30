@@ -21,6 +21,7 @@ export interface IStatus {
 }
 export interface IBooksInfo {
   books: any;
+  favouriteBooks: any;
   currentBook: any;
   feedBack: Array<string>;
   searchParam: string;
@@ -32,6 +33,9 @@ export type DBInfo = string | null | undefined;
 export interface IBook1 {
   [key: string]: Info;
 }
+export interface IBook {
+  [key: string]: any;
+}
 
 export interface ISubmit {
   onSubmit: ({ login, pass }: ILogIn) => Promise<void>;
@@ -42,6 +46,11 @@ export interface IForm {
   onSubmit: FormEventHandler;
 }
 
+export interface IGetInfoDB {
+  setFunction: Dispatch<SetStateAction<[]>>;
+  setLoading: Dispatch<SetStateAction<string>> | null;
+  path: string;
+}
 export interface ISetState {
   [key: string]: Dispatch<SetStateAction<string>>;
 }
@@ -79,4 +88,25 @@ export interface ISlider {
 export interface IGetBook {
   searchParam: string;
   startIndex: number;
+}
+export interface IGetCurrentBook {
+  id: string;
+}
+
+export interface IButton extends IAuthProps {
+  textBtn?: string;
+  vision?: boolean | string;
+  handleDoing?: () => void;
+  children?: React.ReactNode;
+}
+export interface IButtonDwn extends IAuthProps {
+  link: string;
+}
+export interface IButtonFvt extends IAuthProps {
+  book: any;
+}
+export interface IFavouriteBookInfo {
+  id: string;
+  title: string;
+  thumbnail: string;
 }
