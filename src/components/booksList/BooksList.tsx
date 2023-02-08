@@ -9,7 +9,7 @@ import { IBook1 } from "../../types/types";
 import { getError, getLoading } from "../../store/selectors/commonSelectors";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getBooks, getSearchName, getTotalQuantity } from "../../store/selectors/bookSelectors";
-import { getBooksBySearchParam } from "../../store/slices/getBookSlice";
+import { getBooksByGenre, getBooksBySearchParam } from "../../store/slices/getBookSlice";
 import { BookCard } from "../card/BookCard";
 
 export const BooksList: FC<IBook1> = ({ genre }) => {
@@ -48,10 +48,9 @@ export const BooksList: FC<IBook1> = ({ genre }) => {
     }, [books.length, loading])
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        // genre
-        //     ? dispatch(bookGenreSearchRequest(searchName, (27 * (currentPage - 1) + 1)))
-        //: 
-        dispatch(getBooksBySearchParam({ searchParam: searchName, startIndex: (27 * (currentPage - 1) + 1) }))
+        genre
+            ? dispatch(getBooksByGenre({ searchParam: searchName, startIndex: (27 * (currentPage - 1) + 1) }))
+            : dispatch(getBooksBySearchParam({ searchParam: searchName, startIndex: (27 * (currentPage - 1) + 1) }))
         setPage(value);
         genre ? navigate(`/genre/${value}`) : navigate(`/bookslist/${value}`);
     };

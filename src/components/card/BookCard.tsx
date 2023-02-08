@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import sample from "../../assets/sample.jpg";
 import { FC } from "react";
 import { useAppDispatch } from "../../hooks/hooks";
+import { setCurrentBook } from "../../store/slices/getBookSlice";
 
 
 export const BookCard: FC<any> = ({ book }) => {
@@ -9,12 +10,12 @@ export const BookCard: FC<any> = ({ book }) => {
   const dispatch = useAppDispatch();
 
   const { id } = book;
-  const { title, categories, authors, publishedDate } = book.volumeInfo;
+  const { title, categories, authors, publishedDate, imageLinks } = book.volumeInfo;
 
   return (
     <figure className="book" >
       <div className="book__wrapper">
-        <img className="book__img" src={book.volumeInfo.imageLinks?.thumbnail || sample} alt="BookImage" />
+        <img className="book__img" src={imageLinks?.thumbnail || sample} alt="BookImage" />
       </div>
 
       <figcaption className="book__description" >
@@ -24,8 +25,7 @@ export const BookCard: FC<any> = ({ book }) => {
         <p className="book__text">Год: {publishedDate ? publishedDate : "Нет информации"}</p>
       </figcaption>
       <Link className="book__link" to={`/book/${id}`} onClick={() =>
-        //dispatch(currentBook(book))
-        console.log("перейти на страницу книги")
+        dispatch(setCurrentBook(book))
       }>
         Подробнее...
       </Link>

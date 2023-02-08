@@ -1,12 +1,14 @@
+import { getBooks } from "./../store/selectors/bookSelectors";
+import { manageUserInfo } from "./../store/slices/manageUserInfo";
 import { FormEventHandler, Dispatch, SetStateAction } from "react";
 
 export interface IAuthProps {
-  authed?: boolean;
+  authed?: string | boolean;
 }
 
 export interface ILogIn {
-  login: string;
-  pass: string;
+  email: string;
+  pasw: string;
 }
 export enum ILoadingStatus {
   IDLE = "idle",
@@ -17,7 +19,7 @@ export enum ILoadingStatus {
 
 export interface IStatus {
   loading: string;
-  error?: null | string;
+  error: null | string;
 }
 export interface IBooksInfo {
   books: any;
@@ -38,7 +40,7 @@ export interface IBook {
 }
 
 export interface ISubmit {
-  onSubmit: ({ login, pass }: ILogIn) => Promise<void>;
+  onSubmit: ({ email, pasw }: ILogIn) => Promise<void>;
 }
 
 export interface IForm {
@@ -109,4 +111,11 @@ export interface IFavouriteBookInfo {
   id: string;
   title: string;
   thumbnail: string;
+}
+export interface IUserInfo {
+  userId: string;
+  phoneNumber: string;
+  nick: string;
+  email: string;
+  photoURL: string;
 }

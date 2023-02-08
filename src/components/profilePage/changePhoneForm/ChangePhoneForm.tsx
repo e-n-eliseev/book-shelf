@@ -1,18 +1,20 @@
 
-import { useEffect, useState, FC } from "react";
+import { useState, FC } from "react";
 import { db } from "../../../firebase/firebase";
 import SubmitButtons from '../../UIComponents/SubmitButtons';
 import { phoneValidation } from "../../../helpers/vars";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { IBook1, Info, ISetState } from "../../../types/types";
-//import { auth, docRef, userId } from "../../../firebase/firebaseAuth";
+import { doc, setDoc } from "firebase/firestore";
+import { IBook1, ISetState } from "../../../types/types";
 import { useForm } from "react-hook-form";
-import { auth } from "../../../firebase/firebaseAuth";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { getPhoneNumber, getUserId } from "../../../store/selectors/manageUserInfo";
+import { setPhoneNumber } from "../../../store/slices/manageUserInfo";
 
+const ChangePhoneForm: FC<ISetState> = () => {
 
-const ChangePhoneForm: FC<ISetState> = ({ setError }) => {
-
-    const [phoneNumber, setPhoneNumber] = useState<Info | null>("");
+    const dispatch = useAppDispatch();
+    const phoneNumber = useAppSelector(getPhoneNumber);
+    const userId = useAppSelector(getUserId);
 
     const [isChanging, setIsChanging] = useState<boolean>(false);
 
@@ -25,26 +27,10 @@ const ChangePhoneForm: FC<ISetState> = ({ setError }) => {
         mode: "all"
     });
 
-
-    const userId = auth.currentUser?.uid;
-    const docRef = doc(db, "users", `${userId}`);
-
-    useEffect(() => {
-        //получаем номер телефона из базы
-        getDoc(docRef)
-            .then((data) => {
-                console.log(data.data()!)
-                setPhoneNumber(data.data()!.phoneNumber)
-            })
-            .catch((error) => {
-                console.log("No such document!", error);
-            })
-    }, []);
-
     const handleSubmitPhone = async (data: IBook1) => {
-        setPhoneNumber(data.phoneNumber);
         setIsChanging(false);
-        await setDoc(docRef, { phoneNumber: data.phoneNumber });
+        await setDoc(doc(db, "users", userId), { phoneNumber: data.phoneNumber });
+        dispatch(setPhoneNumber(`${data.phoneNumber}`));
         reset();
     }
 

@@ -1,27 +1,26 @@
 
-import { FC, useEffect, useState } from "react";
-import { onAuthStateChanged, updateEmail } from "firebase/auth";
+import { FC, useState } from "react";
+import { updateEmail } from "firebase/auth";
 import SubmitButtons from '../../UIComponents/SubmitButtons';
 import ModalWindow from "../../UIComponents/ModalWindow";
 import { emailValidation } from "../../../helpers/vars";
 import { IBook1, ISetState } from "../../../types/types";
 import { useForm } from "react-hook-form";
-import { auth, reauthenticate } from "../../../firebase/firebaseAuth";
+import { reauthenticate } from "../../../firebase/firebaseAuth";
+import { getEmail } from "../../../store/selectors/manageUserInfo";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { setEmail } from "../../../store/slices/manageUserInfo";
 
 
 const ChangeEmailForm: FC<ISetState> = ({ setError }) => {
 
-    const [email, setEmail] = useState<string>("");
+    const dispatch = useAppDispatch();
+    const email = useAppSelector(getEmail);
     const [open, setOpen] = useState<boolean>(false);
 
-    const [isChanging, setIsChanging] = useState<boolean>(false);
+    let newEmail: string = "";
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setEmail(`${user!.email}`);
-        });
-        return unsubscribe;
-    }, []);
+    const [isChanging, setIsChanging] = useState<boolean>(false);
 
     const {
         register,
@@ -35,7 +34,7 @@ const ChangeEmailForm: FC<ISetState> = ({ setError }) => {
 
     const handleOpen = () => {
         const { email } = getValues()
-        setEmail(`${email}`);
+        newEmail = `${email}`;
         setOpen(true);
         reset();
     }
@@ -44,7 +43,8 @@ const ChangeEmailForm: FC<ISetState> = ({ setError }) => {
         try {
             const authData = await reauthenticate(data);
             if (authData) {
-                await updateEmail(authData.user, email);
+                await updateEmail(authData.user, newEmail);
+                dispatch(setEmail(newEmail));
             }
         } catch (error) {
             setError("Вы неверно ввели пароль");

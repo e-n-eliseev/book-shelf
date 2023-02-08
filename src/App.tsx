@@ -15,49 +15,50 @@ import PageNotFound from './components/404/PageNotFound';
 import { GenreList } from './components/genreList/GenreList';
 import { BooksList } from './components/booksList/BooksList';
 import { BookPage } from './components/BookPage/BookPage';
+import { useAppDispatch, useAppSelector } from './hooks/hooks';
+import { getUserId } from './store/selectors/manageUserInfo';
+import { getPhoneFromFb, setEmail, setNick, setPhoneNumber, setPhotoURL, setUserId } from './store/slices/manageUserInfo';
 
 function App() {
 
-  //локально сохраняем статус авторизации
-  const [authed, setAuthed] = useState<boolean>(false);
-  //обработчики изменения состояния авторизации в firebase
-  const handleLogin = (): void => {
-    setAuthed(true);
-  };
-  const handleLogout = (): void => {
-    setAuthed(false);
-  };
+  const userId = useAppSelector(getUserId);
+  const dispatch = useAppDispatch();
+
   //подписываемся на изменение данных о пользователях в firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        handleLogin();
-      } else {
-        handleLogout();
-      }
+      dispatch(setUserId(user ? user.uid : ""));
+      dispatch(setEmail(`${user!.email}`));
+      dispatch(getPhoneFromFb())
+      dispatch(setNick(user?.displayName
+        ? user.displayName
+        : ""));
+      dispatch(setPhotoURL(user?.photoURL
+        ? user.photoURL
+        : ""));
     });
     return unsubscribe;
   }, []);
 
   return (
     <div className="App">
-      <Header authed={authed} />
+      <Header authed={userId} />
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<PublicRoute authed={authed} />}>
+        <Route path="/login" element={<PublicRoute authed={userId} />}>
           <Route path="" element={<LogIn />} />
         </Route>
-        <Route path="/signup" element={<PublicRoute authed={authed} />}>
+        <Route path="/signup" element={<PublicRoute authed={userId} />}>
           <Route path="" element={<LogIn authed />} />
         </Route>
         <Route path="/bookslist/:id" element={<BooksList />} />
         <Route path="/genres/:id" element={<GenreList />} />
         <Route path="/genre/:genre" element={<BooksList genre={true} />} />
-        <Route path='/book/:id' element={<BookPage authed={authed} />} />
-        <Route path="/profilepage" element={<PrivateRoute authed={authed} />} >
+        <Route path='/book/:id' element={<BookPage authed={userId} />} />
+        <Route path="/profilepage" element={<PrivateRoute authed={userId} />} >
           <Route path="" element={<ProfilePage />} />
         </Route>
-        <Route path="/favourites" element={<PrivateRoute authed={authed} />} >
+        <Route path="/favourites" element={<PrivateRoute authed={userId} />} >
           <Route path="" element={<FavouritesPage />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
@@ -68,3 +69,5 @@ function App() {
 }
 
 export default App;
+
+

@@ -19,9 +19,9 @@ const LoginForm: FC<ISubmit> = ({ onSubmit }) => {
     });
     //обработчик отправки формы
     const onSubmitForm = (data: ILogIn) => {
-        console.log(data.login, data.pass)
-        const { login, pass } = data
-        onSubmit({ login, pass });
+        console.log(data.email, data.pasw)
+        const { email, pasw } = data
+        onSubmit({ email, pasw });
         reset();
     };
 
@@ -32,7 +32,7 @@ const LoginForm: FC<ISubmit> = ({ onSubmit }) => {
                     type="email"
                     label="Почта"
                     variant="outlined"
-                    {...register("login", {
+                    {...register("email", {
                         required: 'Поле обязательно для заполнения!',
                         pattern: {
                             value: emailValidation,
@@ -40,14 +40,14 @@ const LoginForm: FC<ISubmit> = ({ onSubmit }) => {
                         }
                     })}
                 />
-                {errors?.login && <p className="logIn__input-error">{errors?.login?.message}</p>}
+                {errors?.email && <p className="logIn__input-error">{errors?.email?.message}</p>}
             </div>
             <div className="logIn__input-wrapper">
                 <TextField
                     type="password"
                     label="Пароль"
                     variant="outlined"
-                    {...register("pass", {
+                    {...register("pasw", {
                         required: 'Пароль не может быть пустым',
                         pattern: {
                             value: passwordValidation,
@@ -55,7 +55,7 @@ const LoginForm: FC<ISubmit> = ({ onSubmit }) => {
                         }
                     })}
                 />
-                {errors?.pass && <p className="logIn__input-error">{errors?.pass?.message}</p>}
+                {errors?.pasw && <p className="logIn__input-error">{errors?.pasw?.message}</p>}
             </div>
             <IconButton color="primary"
                 sx={{

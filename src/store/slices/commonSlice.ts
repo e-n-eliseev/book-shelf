@@ -22,9 +22,14 @@ export const commonSlice = createSlice({
     setSuccessLoading: (state: IStatus) => {
       state.loading = ILoadingStatus.SUCCESS;
     },
+    setIdle: (state: IStatus) => {
+      state.loading = ILoadingStatus.IDLE;
+      state.error = null;
+    },
   },
 });
 
-export const { setLoading, setError, setSuccessLoading } = commonSlice.actions;
+export const { setLoading, setError, setSuccessLoading, setIdle } =
+  commonSlice.actions;
 
 export default commonSlice.reducer;

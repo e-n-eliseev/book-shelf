@@ -1,16 +1,20 @@
 
-import { useEffect, useState, FC } from "react";
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
+import { useState, FC } from "react";
+import { updateProfile } from "firebase/auth";
 import SubmitButtons from '../../UIComponents/SubmitButtons';
 import { nameValidation } from "../../../helpers/vars";
-import { ISetState, IBook1, Info } from '../../../types/types';
+import { ISetState, IBook1 } from '../../../types/types';
 import { auth } from "../../../firebase/firebaseAuth";
 import { useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { setNick } from "../../../store/slices/manageUserInfo";
+import { getNick } from "../../../store/selectors/manageUserInfo";
 
 
 const ChangeNameForm: FC<ISetState> = ({ setError }) => {
 
-    const [name, setName] = useState<Info | null>("");
+    const dispatch = useAppDispatch();
+    const name = useAppSelector(getNick);
 
     const [isChanging, setIsChanging] = useState<boolean>(false);
 
@@ -23,23 +27,21 @@ const ChangeNameForm: FC<ISetState> = ({ setError }) => {
         mode: "all"
     });
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => setName(user!.displayName));
-        return unsubscribe;
-    }, []);
     //обработчик отправки формы
     const handleSubmitName = async (data: IBook1) => {
-        const currentUser: any = auth.currentUser
-        try {
-            setName(data.nick);
-            await updateProfile(currentUser, {
-                displayName: `${data.nick}`,
-            });
-        } catch (error: any) {
-            setError(error!.code.split(",")[0]);
-        } finally {
-            setIsChanging(false);
-            reset();
+        if (auth.currentUser) {
+            try {
+                // setName(data.nick);
+                await updateProfile(auth.currentUser, {
+                    displayName: `${data.nick}`,
+                });
+                dispatch(setNick(`${data.nick}`))
+            } catch (error: any) {
+                setError(error!.code.split(",")[0]);
+            } finally {
+                setIsChanging(false);
+                reset();
+            }
         }
     }
 

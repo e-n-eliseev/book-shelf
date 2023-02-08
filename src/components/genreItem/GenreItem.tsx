@@ -1,17 +1,18 @@
 
-import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { IGEnre } from '../../types/types';
 import { FC } from 'react';
+import { useAppDispatch } from '../../hooks/hooks';
+import { getBooksByGenre } from '../../store/slices/getBookSlice';
 
 const GenreItem: FC<IGEnre> = ({ genre }) => {
     const [img, name] = genre;
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const handleSearchGenre = () => {
-        //dispatch(bookGenreSearchRequest(name, 0));
+        dispatch(getBooksByGenre({ searchParam: name, startIndex: 0 }));
         navigate(`/genre/${name}`);
     }
     return (

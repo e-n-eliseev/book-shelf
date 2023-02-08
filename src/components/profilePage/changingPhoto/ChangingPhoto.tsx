@@ -1,7 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import face from "../../../assets/face.jpg";
 import {
-    onAuthStateChanged,
     updateProfile,
 } from "firebase/auth"
 import { getDownloadURL, ref, uploadBytesResumable, deleteObject } from "firebase/storage";
@@ -10,16 +9,14 @@ import { auth } from "../../../firebase/firebaseAuth";
 import { storage } from "../../../firebase/firebase";
 import { fileCheck } from "../../../helpers/uploadFileToFirebase";
 import { ISetState } from "../../../types/types";
+import { getPhotoURL } from "../../../store/selectors/manageUserInfo";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { setPhotoURL } from "../../../store/slices/manageUserInfo";
 
 const ChangingPhoto: FC<ISetState> = ({ setError }) => {
 
-    const [imgUrl, setImgUrl] = useState<string>("");
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            setImgUrl(`${user?.photoURL}`);
-        });
-    }, []);
+    const dispatch = useAppDispatch()
+    const imgUrl = useAppSelector(getPhotoURL);
 
     const handleSubmitImg = (event: any) => {
         event.preventDefault()
@@ -38,11 +35,11 @@ const ChangingPhoto: FC<ISetState> = ({ setError }) => {
                     },
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            setImgUrl(downloadURL);
                             if (auth.currentUser) {
                                 updateProfile(auth.currentUser, {
                                     photoURL: downloadURL
                                 });
+                                dispatch(setPhotoURL(downloadURL));
                             }
                         }).catch((error) => console.log('Error', error));
                     }
@@ -60,7 +57,7 @@ const ChangingPhoto: FC<ISetState> = ({ setError }) => {
                         photoURL: ''
                     });
                 }
-                setImgUrl('');
+                dispatch(setPhotoURL(""));
             }).catch((error) => {
                 console.log('Uh-oh, an error occurred!', error);
             });

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import common from "./slices/commonSlice";
 import getBooks from "./slices/getBookSlice";
+import manageUserInfo from './slices/manageUserInfo';
 
 export const store = configureStore({
   reducer: {
     common,
-    getBooks
+    getBooks,
+    manageUserInfo,
   },
 })
 

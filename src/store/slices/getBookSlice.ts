@@ -8,7 +8,7 @@ import { setError, setLoading, setSuccessLoading } from "./commonSlice";
 import { bookAdapter, missingData } from "../../helpers/bookSearch";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-//`Ecq6HrbY5cPKtGhcrJN7UrJkTxq2`
+
 export const getBooksBySearchParam = createAsyncThunk(
   "getBooks/getBooksBySearchParam",
   async (
@@ -19,6 +19,28 @@ export const getBooksBySearchParam = createAsyncThunk(
     try {
       const booksData = await axios.get(
         `https://www.googleapis.com/books/v1/volumes?q=${searchParam}+inauthor:${searchParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
+      );
+      dispatch(setTotalBooksQuantity(booksData.data.totalItems));
+      dispatch(setSearchParam(searchParam));
+      dispatch(setSuccessLoading());
+      console.log(booksData);
+      return booksData.data;
+    } catch (error) {
+      //rejectWithValue(error);
+      dispatch(setError(`${error}`));
+    }
+  }
+);
+export const getBooksByGenre = createAsyncThunk(
+  "getBooks/getBooksByGenre",
+  async (
+    { searchParam, startIndex }: IGetBook,
+    { rejectWithValue, dispatch }
+  ) => {
+    dispatch(setLoading());
+    try {
+      const booksData = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes?q=subject:${searchParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
       );
       dispatch(setTotalBooksQuantity(booksData.data.totalItems));
       dispatch(setSearchParam(searchParam));
@@ -86,9 +108,15 @@ export const getBookSlice = createSlice({
     setSearchParam: (state: IBooksInfo, action: PayloadAction<string>) => {
       state.searchParam = action.payload;
     },
+    setCurrentBook: (state: IBooksInfo, action: PayloadAction<string>) => {
+      state.currentBook = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getBooksBySearchParam.fulfilled, (state, action) => {
+      state.books = missingData(action.payload);
+    });
+    builder.addCase(getBooksByGenre.fulfilled, (state, action) => {
       state.books = missingData(action.payload);
     });
     builder.addCase(getCurrentBookInfo.fulfilled, (state, action) => {
@@ -100,6 +128,7 @@ export const getBookSlice = createSlice({
   },
 });
 
-export const { setTotalBooksQuantity, setSearchParam } = getBookSlice.actions;
+export const { setTotalBooksQuantity, setSearchParam, setCurrentBook } =
+  getBookSlice.actions;
 
 export default getBookSlice.reducer;
