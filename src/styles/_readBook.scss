@@ -1,0 +1,36 @@
+.read-book {
+    @extend %grid-wrapper;
+
+    &__content {
+        @extend %grid-content;
+    }
+
+    &__book {
+        width: 800px;
+        height: 800px;
+
+        &-wrapper {
+            @extend %genre-shadow-hover;
+            border: 3px solid $secondary-bg-color;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+    }
+}
+
+@media (max-width:850px){
+    .read-book {
+        &__book {
+            width: 550px;
+            height: 550px;
+        }
+    }
+}
+@media (max-width:600px){
+    .read-book {
+        &__book {
+            width: 335px;
+        }
+    }
+}

@@ -5,42 +5,34 @@ import { useEffect, useState, FC } from "react";
 import { IButtonFvt, IFavouriteBookInfo } from "../../../types/types";
 import { adapter } from "../../../helpers/getInfoFromFB";
 import { db } from "../../../firebase/firebase";
-import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
-import { getFavouriteBooksInfo } from "../../../store/slices/getBookSlice";
+import { useAppSelector } from "../../../hooks/hooks";
 import { getFavouriteBooks } from "../../../store/selectors/bookSelectors";
+import { getUserId } from "../../../store/selectors/manageUserInfoSelectors";
 
 
 const FavoriteBtn: FC<IButtonFvt> = ({ book, authed }) => {
 
     const [isFavorite, setIsFavourite] = useState(false);
+    const userId = useAppSelector(getUserId);
     const favouriteBooks = useAppSelector<{ [key: string]: IFavouriteBookInfo }>(getFavouriteBooks);
 
-    const dispatch = useAppDispatch();
-
     const currentBook = adapter(book);
-
-    useEffect(() => {
-        dispatch(getFavouriteBooksInfo())
-    }, [])
 
     useEffect(() => {
         if (Object.keys(favouriteBooks).length) {
             const isInTheList = Object.keys(favouriteBooks).includes(currentBook.id);
             isInTheList ? setIsFavourite(true) : setIsFavourite(false)
         }
-    }, [])
+    }, [favouriteBooks])
 
     const addToFavourites = async () => {
         try {
             setIsFavourite(!isFavorite)
             if (!isFavorite) {
-                await setDoc(doc(db, "users", `Ecq6HrbY5cPKtGhcrJN7UrJkTxq2/favourites/items`), { [currentBook.id]: currentBook }, { merge: true });
+                await setDoc(doc(db, "users", `${userId}/favourites/items`), { [currentBook.id]: currentBook }, { merge: true });
             } else {
-                await updateDoc(doc(db, `users/Ecq6HrbY5cPKtGhcrJN7UrJkTxq2/favourites/items`), { [currentBook.id]: deleteField() })
+                await updateDoc(doc(db, `users/${userId}/favourites/items`), { [currentBook.id]: deleteField() })
             }
-
-
-
         } catch (error) {
             console.log(error);
         }

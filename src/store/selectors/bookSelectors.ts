@@ -7,3 +7,5 @@ export const getSearchName = (state: RootState) => state.getBooks.searchParam;
 export const getCurrentBook = (state: RootState) => state.getBooks.currentBook;
 export const getFavouriteBooks = (state: RootState) =>
   state.getBooks.favouriteBooks;
+export const getLastReadBooks = (state: RootState) =>
+  state.getBooks.lastReadBooks;

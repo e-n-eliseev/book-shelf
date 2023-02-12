@@ -1,5 +1,6 @@
 
 import { FC } from "react";
+import Favourites from "./favourites/Favourites";
 
 const FavouritesPage: FC = () => {
 
@@ -9,6 +10,9 @@ const FavouritesPage: FC = () => {
                 <h1 className='favourites__heading'>
                     Мои книги
                 </h1>
+                <Favourites path={"favourites"} />
+                <Favourites path={"recent"} />
+
             </div>
         </main>
     )

@@ -3,7 +3,6 @@ import { NavigateFunction, Params, useNavigate, useParams } from "react-router-d
 import { shallowEqual } from "react-redux";
 import ReadBtn from './readBtn/ReadBtn';
 import FavoriteBtn from './favouriteBtn/FavouriteBtn';
-import RecommendedBooks from "../recommendedBooks/recommendedBooks";
 import DownloadBtn from './downloadBtn/DownloadBtn';
 import { getError, getLoading } from '../../store/selectors/commonSelectors';
 import Loader from '../UIComponents/Loader';
@@ -72,10 +71,6 @@ export const BookPage: FC<IAuthProps> = ({ authed }) => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <RecommendedBooks
-                                    categories={categories}
-                                    title={"Похожие книги"} /> */}
-
                             </>
                             : null
                 }

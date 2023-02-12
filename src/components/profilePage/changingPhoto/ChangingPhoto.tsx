@@ -9,7 +9,7 @@ import { auth } from "../../../firebase/firebaseAuth";
 import { storage } from "../../../firebase/firebase";
 import { fileCheck } from "../../../helpers/uploadFileToFirebase";
 import { ISetState } from "../../../types/types";
-import { getPhotoURL } from "../../../store/selectors/manageUserInfo";
+import { getPhotoURL } from "../../../store/selectors/manageUserInfoSelectors";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setPhotoURL } from "../../../store/slices/manageUserInfo";
 

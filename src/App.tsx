@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './styles/App.scss';
 import { Header } from './components/header/Header';
 import { Footer } from './components/footer/Footer';
@@ -16,8 +16,9 @@ import { GenreList } from './components/genreList/GenreList';
 import { BooksList } from './components/booksList/BooksList';
 import { BookPage } from './components/BookPage/BookPage';
 import { useAppDispatch, useAppSelector } from './hooks/hooks';
-import { getUserId } from './store/selectors/manageUserInfo';
-import { getPhoneFromFb, setEmail, setNick, setPhoneNumber, setPhotoURL, setUserId } from './store/slices/manageUserInfo';
+import { getUserId } from './store/selectors/manageUserInfoSelectors';
+import { getPhoneFromFb, setEmail, setNick, setPhotoURL, setUserId } from './store/slices/manageUserInfo';
+import ReadBook from './components/readBook/ReadBook';
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
         <Route path="/genres/:id" element={<GenreList />} />
         <Route path="/genre/:genre" element={<BooksList genre={true} />} />
         <Route path='/book/:id' element={<BookPage authed={userId} />} />
+        <Route path="/read/:id" element={<ReadBook />} />
         <Route path="/profilepage" element={<PrivateRoute authed={userId} />} >
           <Route path="" element={<ProfilePage />} />
         </Route>

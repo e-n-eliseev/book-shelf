@@ -7,7 +7,7 @@ import { emailValidation } from "../../../helpers/vars";
 import { IBook1, ISetState } from "../../../types/types";
 import { useForm } from "react-hook-form";
 import { reauthenticate } from "../../../firebase/firebaseAuth";
-import { getEmail } from "../../../store/selectors/manageUserInfo";
+import { getEmail } from "../../../store/selectors/manageUserInfoSelectors";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setEmail } from "../../../store/slices/manageUserInfo";
 

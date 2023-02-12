@@ -8,7 +8,7 @@ import { auth } from "../../../firebase/firebaseAuth";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setNick } from "../../../store/slices/manageUserInfo";
-import { getNick } from "../../../store/selectors/manageUserInfo";
+import { getNick } from "../../../store/selectors/manageUserInfoSelectors";
 
 
 const ChangeNameForm: FC<ISetState> = ({ setError }) => {

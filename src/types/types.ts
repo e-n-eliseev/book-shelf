@@ -1,11 +1,15 @@
-import { getBooks } from "./../store/selectors/bookSelectors";
-import { manageUserInfo } from "./../store/slices/manageUserInfo";
 import { FormEventHandler, Dispatch, SetStateAction } from "react";
+import { RootState } from "../store/store";
 
 export interface IAuthProps {
   authed?: string | boolean;
 }
 
+export interface IState {
+  common: IStatus;
+  getBooks: IBooksInfo;
+  manageUserInfo: IUserInfo;
+}
 export interface ILogIn {
   email: string;
   pasw: string;
@@ -25,6 +29,7 @@ export interface IBooksInfo {
   books: any;
   favouriteBooks: any;
   currentBook: any;
+  lastReadBooks: any;
   feedBack: Array<string>;
   searchParam: string;
   totalBookQuantity: number;
@@ -118,4 +123,11 @@ export interface IUserInfo {
   nick: string;
   email: string;
   photoURL: string;
+}
+
+export interface IFavourite {
+  path: string;
+}
+export interface IFavouriteBook {
+  book: any;
 }
