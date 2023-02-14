@@ -11,20 +11,22 @@ import { getUserId } from "../../../store/selectors/manageUserInfoSelectors";
 
 
 const FavoriteBtn: FC<IButtonFvt> = ({ book, authed }) => {
-
+    //переменная хранящая информацию о том находится книга в избранном или нет
     const [isFavorite, setIsFavourite] = useState(false);
+    //получаем ID пользователя
     const userId = useAppSelector(getUserId);
+    //получаем список избранных книг
     const favouriteBooks = useAppSelector<{ [key: string]: IFavouriteBookInfo }>(getFavouriteBooks);
-
+    //адаптер для обобщенной информации о книге
     const currentBook = adapter(book);
-
+    //определяем находится ли книга в списке избранного
     useEffect(() => {
         if (Object.keys(favouriteBooks).length) {
             const isInTheList = Object.keys(favouriteBooks).includes(currentBook.id);
             isInTheList ? setIsFavourite(true) : setIsFavourite(false)
         }
-    }, [favouriteBooks])
-
+    }, [currentBook.id, favouriteBooks])
+    //функция обработчик клика по кнопке избраного, добавляющая в список избранного в FB
     const addToFavourites = async () => {
         try {
             setIsFavourite(!isFavorite)

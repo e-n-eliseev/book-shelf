@@ -17,10 +17,7 @@ import { db } from "../../firebase/firebase";
 
 export const getBooksBySearchParam = createAsyncThunk(
   "getBooks/getBooksBySearchParam",
-  async (
-    { searchParam, startIndex }: IGetBook,
-    { rejectWithValue, dispatch }
-  ) => {
+  async ({ searchParam, startIndex }: IGetBook, { dispatch }) => {
     dispatch(setLoading());
     try {
       const booksData = await axios.get(
@@ -32,7 +29,6 @@ export const getBooksBySearchParam = createAsyncThunk(
       console.log(booksData);
       return booksData.data;
     } catch (error) {
-      //rejectWithValue(error);
       console.log(error);
       dispatch(setError(`${error}`));
     }
@@ -40,10 +36,7 @@ export const getBooksBySearchParam = createAsyncThunk(
 );
 export const getBooksByGenre = createAsyncThunk(
   "getBooks/getBooksByGenre",
-  async (
-    { searchParam, startIndex }: IGetBook,
-    { rejectWithValue, dispatch }
-  ) => {
+  async ({ searchParam, startIndex }: IGetBook, { dispatch }) => {
     dispatch(setLoading());
     try {
       const booksData = await axios.get(
@@ -54,7 +47,6 @@ export const getBooksByGenre = createAsyncThunk(
       dispatch(setSuccessLoading());
       return booksData.data;
     } catch (error) {
-      //rejectWithValue(error);
       console.log(error);
       dispatch(setError(`${error}`));
     }
@@ -68,11 +60,9 @@ export const getCurrentBookInfo = createAsyncThunk(
       const currentBookInfo = await axios.get(
         `https://www.googleapis.com/books/v1/volumes/${id}?key=${bookApiKey}`
       );
-      dispatch(getFavouriteBooksInfo());
       dispatch(setSuccessLoading());
       return currentBookInfo.data;
     } catch (error) {
-      //rejectWithValue(error);
       console.log(error);
       dispatch(setError(`${error}`));
     }
@@ -80,7 +70,7 @@ export const getCurrentBookInfo = createAsyncThunk(
 );
 export const getFavouriteBooksInfo = createAsyncThunk(
   "getBooks/getFavouriteBooksInfo",
-  async (_, { rejectWithValue, dispatch, getState }) => {
+  async (_, { getState }) => {
     try {
       const state = getState() as IState;
       const userId = state.manageUserInfo.userId;
@@ -90,13 +80,12 @@ export const getFavouriteBooksInfo = createAsyncThunk(
       return favouriteBooks?.data() ? favouriteBooks.data() : {};
     } catch (error) {
       console.log(error);
-      //rejectWithValue(error);
     }
   }
 );
 export const getLastReadBooksInfo = createAsyncThunk(
   "getBooks/getLastReadBooksInfo",
-  async (_, { rejectWithValue, dispatch, getState }) => {
+  async (_, { dispatch, getState }) => {
     dispatch(setLoading());
     try {
       const state = getState() as IState;
@@ -107,18 +96,18 @@ export const getLastReadBooksInfo = createAsyncThunk(
       dispatch(setSuccessLoading());
       return lastReadBooks.data()?.recent ? lastReadBooks.data()!.recent : [];
     } catch (error) {
-      //rejectWithValue(error);
       console.log(error);
     }
   }
 );
 export const setLastReadBooksFB = createAsyncThunk(
   "getBooks/getLastReadBooksInfo",
-  async (book: IBook, { rejectWithValue, dispatch, getState }) => {
+  async (book: IBook, { getState }) => {
     try {
       const state = getState() as IState;
       const lastRead: IBook[] = state.getBooks.lastReadBooks;
       const userId = state.manageUserInfo.userId;
+      // const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
       const isInTheList =
         lastRead.findIndex((item: IBook) => item.id === book.id) === -1;
       if (isInTheList) {
@@ -145,13 +134,13 @@ export const setLastReadBooksFB = createAsyncThunk(
 );
 
 const initialState: IBooksInfo = {
+  lastReadBooks: [],
   books: [],
   currentBook: {},
   feedBack: [],
   searchParam: "",
   totalBookQuantity: 0,
   favouriteBooks: {},
-  lastReadBooks: [],
 };
 
 export const getBookSlice = createSlice({

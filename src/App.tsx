@@ -21,7 +21,7 @@ import { getPhoneFromFb, setEmail, setNick, setPhotoURL, setUserId } from './sto
 import ReadBook from './components/readBook/ReadBook';
 
 function App() {
-
+  //получаем  ID текущего пользователя
   const userId = useAppSelector(getUserId);
   const dispatch = useAppDispatch();
 

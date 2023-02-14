@@ -1,5 +1,4 @@
 import { FormEventHandler, Dispatch, SetStateAction } from "react";
-import { RootState } from "../store/store";
 
 export interface IAuthProps {
   authed?: string | boolean;
@@ -130,4 +129,11 @@ export interface IFavourite {
 }
 export interface IFavouriteBook {
   book: any;
+}
+
+declare global {
+  interface Window {
+    google: any;
+    viewer: any;
+  }
 }

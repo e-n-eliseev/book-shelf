@@ -5,8 +5,9 @@ import BasicButton from "../../UIComponents/BasicButton";
 const ReadBtn: FC<any> = ({ book }) => {
 
     const navigate = useNavigate();
-
-    const onRead = () => navigate(`/read/${book.id}`)
+    //обработчик клика по кнопке чтения
+    const onRead = () => navigate(`/read/${book.id}`);
+    //параметр установки активного состояния кнопки
     const vision = book.accessInfo.viewability === "NO_PAGES";
 
     return (
@@ -15,3 +16,4 @@ const ReadBtn: FC<any> = ({ book }) => {
 }
 
 export default ReadBtn;
+

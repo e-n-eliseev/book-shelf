@@ -11,7 +11,7 @@ import sample from "../../assets/sample.jpg";
 import { DBInfo, IAuthProps, IBook } from '../../types/types';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { getCurrentBook } from "../../store/selectors/bookSelectors";
-import { getCurrentBookInfo } from "../../store/slices/getBookSlice";
+import { getCurrentBookInfo, getFavouriteBooksInfo } from "../../store/slices/getBookSlice";
 
 export const BookPage: FC<IAuthProps> = ({ authed }) => {
 
@@ -24,7 +24,8 @@ export const BookPage: FC<IAuthProps> = ({ authed }) => {
 
     let title, categories, authors, publishedDate, description, img, id, link, averageRating, ratingsCount;
     useEffect(() => {
-        dispatch(getCurrentBookInfo({ id: `${params.id}` }))
+        dispatch(getCurrentBookInfo({ id: `${params.id}` }));
+        dispatch(getFavouriteBooksInfo());
     }, [])
 
     if (Object.keys(currentBook).length) {
