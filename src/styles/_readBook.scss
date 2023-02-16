@@ -8,13 +8,26 @@
     &__book {
         width: 800px;
         height: 800px;
-
         &-wrapper {
             @extend %genre-shadow-hover;
             border: 3px solid $secondary-bg-color;
             border-radius: 20px;
             overflow: hidden;
             margin-top: 20px;
+        }
+    }
+    &__btn{
+        @extend %genre-shadow-hover;
+        max-width: 300px;
+        padding: 10px;
+        border-radius: 15px;
+        @include font(700);
+        margin-top: 10px;
+        background-color: $secondary-bg-color;
+        color: $primary-bg-color;
+        transition: 0.3s ease-in-out;
+        &:hover{
+            transform:scale(1.1)
         }
     }
 }

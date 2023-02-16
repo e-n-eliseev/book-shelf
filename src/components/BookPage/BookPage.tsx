@@ -6,39 +6,40 @@ import FavoriteBtn from './favouriteBtn/FavouriteBtn';
 import DownloadBtn from './downloadBtn/DownloadBtn';
 import { getError, getLoading } from '../../store/selectors/commonSelectors';
 import Loader from '../UIComponents/Loader';
-import { FC, useEffect } from 'react';
-import sample from "../../assets/sample.jpg";
-import { DBInfo, IAuthProps, IBook } from '../../types/types';
+import { FC, useEffect, useLayoutEffect } from 'react';
+import { DBInfo, IAuthProps, IBook, IBook2 } from '../../types/types';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { getCurrentBook } from "../../store/selectors/bookSelectors";
 import { getCurrentBookInfo, getFavouriteBooksInfo } from "../../store/slices/getBookSlice";
+import { bookInfoAdapter } from "../../helpers/bookInfoAdapter";
+import ProgressiveImage from "react-progressive-graceful-image";
+import loadingImg from "../../assets/loading.gif";
+import { BasicRating } from "../UIComponents/BasicRating";
+import BasicTabs from "../UIComponents/BasicTabs";
+import RecommendedBooks from "../recommendedBooks/recommendedBooks";
+
 
 export const BookPage: FC<IAuthProps> = ({ authed }) => {
 
     const params: Readonly<Params<string>> = useParams();
     const dispatch = useAppDispatch();
     const navigate: NavigateFunction = useNavigate();
+
     const error = useAppSelector<DBInfo>(getError);
     const loading = useAppSelector<string>(getLoading);
     const currentBook = useAppSelector<IBook>(getCurrentBook, shallowEqual);
+    const feedBack = {}
 
-    let title, categories, authors, publishedDate, description, img, id, link, averageRating, ratingsCount;
-    useEffect(() => {
+    let book: IBook2 = {};
+
+    useLayoutEffect(() => {
         dispatch(getCurrentBookInfo({ id: `${params.id}` }));
         dispatch(getFavouriteBooksInfo());
-    }, [])
+    }, [params.id])
+
 
     if (Object.keys(currentBook).length) {
-        title = currentBook?.volumeInfo.title;
-        categories = currentBook?.volumeInfo.categories;
-        authors = currentBook?.volumeInfo.authors;
-        publishedDate = currentBook?.volumeInfo.publishedDate;
-        description = currentBook?.volumeInfo?.description || currentBook!.volumeInfo.subtitle;
-        img = currentBook?.volumeInfo.imageLinks?.thumbnail || sample;
-        id = currentBook?.id;
-        link = currentBook?.accessInfo.epub?.downloadLink;
-        averageRating = currentBook?.volumeInfo.averageRating;
-        ratingsCount = currentBook?.volumeInfo.ratingsCount;
+        book = bookInfoAdapter(currentBook);
     }
 
     useEffect(() => {
@@ -51,27 +52,41 @@ export const BookPage: FC<IAuthProps> = ({ authed }) => {
                 {
                     loading === "pending"
                         ? <Loader />
-                        : Object.keys(currentBook).length
+                        : Object.keys(book).length
                             ? <>
-                                <div className="bookPage__info">
+                                <section className="bookPage__info">
                                     <div className="bookPage__img-wrapper">
-                                        <img className="bookPage__img" src={img} alt="BookImage" />
+                                        <ProgressiveImage
+                                            src={book.thumbnail}
+                                            placeholder={loadingImg}
+                                        >
+                                            {(src, loading) => <img style={{ opacity: loading ? 0 : 1 }} className="bookPage__img" src={src} alt="BookImage" />}
+                                        </ProgressiveImage>
                                     </div>
                                     <div className="bookPage__content" >
-                                        <h1 className="bookPage__heading">{title ? title : "Нет информации"}</h1>
-                                        <p className="bookPage__text">Категория: {categories ? categories : "Нет информации"}</p>
-                                        <p className="bookPage__text">Авторы: {authors ? authors : "Нет информации"}</p>
-                                        <p className="bookPage__text">Год: {publishedDate ? publishedDate : "Нет информации"}</p>
+                                        <h1 className="bookPage__heading">{book.title}</h1>
+                                        <p className="bookPage__text">Категория: {book.categories}</p>
+                                        <p className="bookPage__text">Авторы: {book.authors}</p>
+                                        <p className="bookPage__text">Год: {book.publishedDate}</p>
+                                        <BasicRating
+                                            averageRating={+book.averageRating}
+                                        />
                                         <div className="bookPage__buttons">
                                             <FavoriteBtn authed={authed}
-                                                book={currentBook} />
-                                            <ReadBtn book={currentBook} />
+                                                book={book} />
+                                            <ReadBtn book={book} />
                                             <DownloadBtn authed={authed}
-                                                link={link ? link : ""} />
-                                            <BasicButton textBtn={"КУПИТЬ"} />
+                                                link={book.link ? book.link : ""} />
+                                            <BasicButton textBtn={"КУПИТЬ"} authed={false} />
                                         </div>
                                     </div>
-                                </div>
+                                </section>
+                                <BasicTabs
+                                    data={book.description}
+                                    feedback={feedBack}
+                                />
+                                <RecommendedBooks
+                                    categories={book.categories === "Нет информации" ? book.title : book.categories} />
                             </>
                             : null
                 }

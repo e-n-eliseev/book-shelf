@@ -1,10 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
-import { adapter } from "../../helpers/getInfoFromFB";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { getCurrentBook } from "../../store/selectors/bookSelectors";
-import { getCurrentBookInfo, getFavouriteBooksInfo, setLastReadBooksFB } from "../../store/slices/getBookSlice";
 import Loader from "../UIComponents/Loader";
 
 const ReadBook: FC = () => {
@@ -14,48 +9,37 @@ const ReadBook: FC = () => {
     const params = useParams();
     //переменная для отслеживания состояния загрузки скрипта Google Book Viewer
     const [loaded, setLoaded] = useState(false);
-    const dispatch = useAppDispatch();
-    //получаем информацию о текущей книге
-    const currentBook = useAppSelector(getCurrentBook, shallowEqual);
-    //отправляем данные в FB о полседней прочитанной книге
-    useEffect(() => {
-        if (Object.keys(currentBook).length) {
-            dispatch(setLastReadBooksFB(adapter(currentBook)))
-        } else {
-            dispatch(getCurrentBookInfo({ id: `${params.id}` }));
-            dispatch(getFavouriteBooksInfo());
-        }
-    }, [currentBook])
+    const [btnVision, setBtnVision] = useState(true);
     //вставка скрипта Google Book Viewer
     useEffect(() => {
         const script = document.createElement('script');
         script.src = "https://www.google.com/books/jsapi.js";
         script.addEventListener('load', () => setLoaded(true));
-        document.head.appendChild(script);
+        document.body.appendChild(script);
         return () => {
-            document.head.removeChild(script);
+            document.body.removeChild(script);
         }
     }, [])
     //запуск скрипта Google Book Viewer, после его полной загрузки загрузится
     const initialize = () => {
-        var viewer = new window.google.books.DefaultViewer(canvasRef.current);
+        setBtnVision(false)
+        let viewer = new window.google.books.DefaultViewer(canvasRef.current);
+        console.log(canvasRef.current)
         viewer.load(params.id);
     }
+
     useEffect(() => {
         if (loaded) {
             if (window.viewer) {
-                console.log("old")
                 let viewer = new window.google.books.DefaultViewer
                     (canvasRef.current);
                 viewer.load(params.id);
             }
             else {
-                console.log("new")
                 window.google.books.load()
                 window.google.books.setOnLoadCallback(
                     initialize
                 )
-
             }
         }
     }, [loaded])
@@ -65,6 +49,10 @@ const ReadBook: FC = () => {
             <div className="read-book__content">
                 {loaded
                     ? <div className="read-book__book-wrapper">
+                        {btnVision
+                            ? <button className="read-book__btn" onClick={() => window.location.reload()}>Если книга не отображается, пожалуйста, нажмите для загрузки программы просмотра книги.</button>
+                            : null
+                        }
                         <div ref={canvasRef} className="read-book__book" ></div>
                     </div>
                     : <Loader />

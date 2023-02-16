@@ -2,7 +2,12 @@ import { ILogIn } from "./../../types/types";
 import { IUserInfo } from "../../types/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { setError, setLoading, setSuccessLoading } from "./commonSlice";
+import {
+  setError,
+  setIdle,
+  setLoading,
+  setSuccessLoading,
+} from "./commonSlice";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import {
@@ -21,6 +26,8 @@ export const getSignUp = createAsyncThunk(
     } catch (error) {
       //rejectWithValue(error);
       dispatch(setError(`${error}`));
+    } finally {
+      setTimeout(() => dispatch(setIdle()), 2000);
     }
   }
 );
@@ -34,6 +41,8 @@ export const getSignIn = createAsyncThunk(
     } catch (error) {
       //rejectWithValue(error);
       dispatch(setError(`${error}`));
+    } finally {
+      setTimeout(() => dispatch(setIdle()), 2000);
     }
   }
 );
@@ -50,6 +59,8 @@ export const getPhoneFromFb = createAsyncThunk(
     } catch (error) {
       //rejectWithValue(error);
       dispatch(setError(`${error}`));
+    } finally {
+      setTimeout(() => dispatch(setIdle()), 2000);
     }
   }
 );
@@ -81,17 +92,6 @@ export const manageUserInfo = createSlice({
     setPhotoURL: (state: IUserInfo, action: PayloadAction<string>) => {
       state.photoURL = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    // builder.addCase(getBooksBySearchParam.fulfilled, (state, action) => {
-    //   state.books = missingData(action.payload);
-    // });
-    // builder.addCase(getCurrentBookInfo.fulfilled, (state, action) => {
-    //   state.currentBook = bookAdapter(action.payload);
-    // });
-    // builder.addCase(getFavouriteBooksInfo.fulfilled, (state, action) => {
-    //   state.favouriteBooks = action.payload;
-    // });
   },
 });
 

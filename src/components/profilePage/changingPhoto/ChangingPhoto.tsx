@@ -12,11 +12,13 @@ import { ISetState } from "../../../types/types";
 import { getPhotoURL } from "../../../store/selectors/manageUserInfoSelectors";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setPhotoURL } from "../../../store/slices/manageUserInfo";
+import ProgressiveImage from "react-progressive-graceful-image";
+import loadingImg from "../../../assets/loading.gif";
 
 const ChangingPhoto: FC<ISetState> = ({ setError }) => {
 
     const dispatch = useAppDispatch()
-    const imgUrl = useAppSelector(getPhotoURL);
+    const imgUrl = useAppSelector(getPhotoURL) || face;
 
     const handleSubmitImg = (event: any) => {
         event.preventDefault()
@@ -68,7 +70,12 @@ const ChangingPhoto: FC<ISetState> = ({ setError }) => {
             <h2 className="profile__form-heading">Фото:</h2>
             <div className="profile__form-content ">
                 <div className="profile__img-wrapper">
-                    <img className="profile__img" src={imgUrl ? imgUrl : face} alt='uploaded file' />
+                    <ProgressiveImage
+                        src={imgUrl}
+                        placeholder={loadingImg}
+                    >
+                        {(src, loading) => <img style={{ opacity: loading ? 0 : 1 }} className="profile__img" src={src} alt="uploaded file" />}
+                    </ProgressiveImage>
                 </div>
                 <PhotoButtons />
             </div>

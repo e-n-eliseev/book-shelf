@@ -1,35 +1,31 @@
 import { BookCard } from "../card/BookCard";
 import uniqid from "uniqid";
-import { useEffect, useState } from "react";
+import { FC, useEffect } from "react";
+import { IBook2 } from "../../types/types";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { getBooks } from "../../store/selectors/bookSelectors";
+import { getBooksByCategory } from "../../store/slices/getBookSlice";
 
-const RecommendedBooks = ({ title = "Рекомендуем:", categories = "" }) => {
-    const someData = {
-        searchName: categories,
-        maxResults: 3,
-        startIndex: 1
-    }
+const RecommendedBooks: FC<IBook2> = ({ categories }) => {
 
-    const [recommendedBooks, setRecommendedBooks] = useState([]);
+    const recomendedBooks = useAppSelector(getBooks)
+    const dispatch = useAppDispatch();
 
-    // useEffect(() => {
-    //     postData('http://localhost:5000/api/booksearch/sortbook', someData)
-    //         .then(data => {
-    //             setRecommendedBooks(data.items);
-    //         })
-    // }, []);
+    const startIndex = Math.floor(Math.random() * 5 + 1)
+    useEffect(() => {
+        dispatch(getBooksByCategory({ searchParam: categories, startIndex }))
+    }, []);
 
     return (
         <>
             {
-                recommendedBooks?.length
-                    ? <>
-                        <div className="recommended-books">
-                            <h2 className="recommended-books__title genre__heading">{title}</h2>
-                            <div className="recommended-books__items">
-                                {recommendedBooks?.length && recommendedBooks.map(book => <BookCard key={uniqid()} book={book} />)}
-                            </div>
+                recomendedBooks?.length
+                    ? <section className="recomended-books">
+                        <h2 className="recomended-books__title">Вам могут быть интересны:</h2>
+                        <div className="recomended-books__items">
+                            {recomendedBooks?.length && recomendedBooks.map((book: any) => <BookCard key={uniqid()} book={book} />)}
                         </div>
-                    </>
+                    </section>
                     : null
             }
         </>

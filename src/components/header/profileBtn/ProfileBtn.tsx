@@ -7,11 +7,13 @@ import { useState } from 'react';
 import { logOut } from "../../../firebase/firebaseAuth";
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const ProfileBtn: FC = () => {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+    const navigate = useNavigate()
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -19,6 +21,11 @@ const ProfileBtn: FC = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const handleLogOut = () => {
+        navigate("/");
+        logOut();
+    }
     return (
         <>
             <Tooltip title="Открыть меню профиля">
@@ -26,7 +33,7 @@ const ProfileBtn: FC = () => {
                     <AccountBoxIcon />
                 </IconButton>
             </Tooltip><Tooltip title="Нажмите для выхода из профиля">
-                <IconButton onClick={logOut} sx={{ size: "large", color: 'white' }}>
+                <IconButton onClick={handleLogOut} sx={{ size: "large", color: 'white' }}>
                     <LogoutIcon />
                 </IconButton>
             </Tooltip>

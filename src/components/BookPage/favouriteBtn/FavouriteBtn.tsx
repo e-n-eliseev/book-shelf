@@ -3,7 +3,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { deleteField, doc, setDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState, FC } from "react";
 import { IButtonFvt, IFavouriteBookInfo } from "../../../types/types";
-import { adapter } from "../../../helpers/getInfoFromFB";
 import { db } from "../../../firebase/firebase";
 import { useAppSelector } from "../../../hooks/hooks";
 import { getFavouriteBooks } from "../../../store/selectors/bookSelectors";
@@ -17,23 +16,23 @@ const FavoriteBtn: FC<IButtonFvt> = ({ book, authed }) => {
     const userId = useAppSelector(getUserId);
     //получаем список избранных книг
     const favouriteBooks = useAppSelector<{ [key: string]: IFavouriteBookInfo }>(getFavouriteBooks);
-    //адаптер для обобщенной информации о книге
-    const currentBook = adapter(book);
+    const { id, title, thumbnail } = book;
+    const sendBookInfo = { id, title, thumbnail }
     //определяем находится ли книга в списке избранного
     useEffect(() => {
         if (Object.keys(favouriteBooks).length) {
-            const isInTheList = Object.keys(favouriteBooks).includes(currentBook.id);
+            const isInTheList = Object.keys(favouriteBooks).includes(id);
             isInTheList ? setIsFavourite(true) : setIsFavourite(false)
         }
-    }, [currentBook.id, favouriteBooks])
+    }, [id, favouriteBooks])
     //функция обработчик клика по кнопке избраного, добавляющая в список избранного в FB
     const addToFavourites = async () => {
         try {
             setIsFavourite(!isFavorite)
             if (!isFavorite) {
-                await setDoc(doc(db, "users", `${userId}/favourites/items`), { [currentBook.id]: currentBook }, { merge: true });
+                await setDoc(doc(db, "users", `${userId}/favourites/items`), { [id]: sendBookInfo }, { merge: true });
             } else {
-                await updateDoc(doc(db, `users/${userId}/favourites/items`), { [currentBook.id]: deleteField() })
+                await updateDoc(doc(db, `users/${userId}/favourites/items`), { [id]: deleteField() })
             }
         } catch (error) {
             console.log(error);

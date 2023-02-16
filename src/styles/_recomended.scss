@@ -1,0 +1,16 @@
+.recomended-books{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    &__title{
+        @include font(700,$h2-fs);
+        margin: 20px 0 20px 0;
+    }
+    &__items{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+}

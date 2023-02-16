@@ -8,7 +8,6 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { Link } from 'react-router-dom';
 import { useState, FC } from 'react';
-import { useDispatch } from 'react-redux';
 import { ISlider } from '../../../../types/types';
 import SwipeableViews from 'react-swipeable-views';
 
@@ -17,7 +16,6 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const Slider: FC<ISlider> = ({ category, images, delay }) => {
 
     const theme = useTheme();
-    const dispatch = useDispatch();
 
     const [activeStep, setActiveStep] = useState(0);
 
@@ -74,7 +72,6 @@ const Slider: FC<ISlider> = ({ category, images, delay }) => {
                             key={step.label}
                             className="book__link"
                             to={`/book/${id}`}
-                        //onClick={() => dispatch(currentBookRequest(id))}
                         >
                             <div >
                                 {Math.abs(activeStep - index) <= 2 ? (

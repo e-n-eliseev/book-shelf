@@ -1,0 +1,19 @@
+.rating {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    &__heading {
+        text-align: left;
+        @include font(700, $p2-fs);
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width:700px){
+    .rating{
+        align-items: center;
+        &__heading {
+            text-align: center;
+        }
+    }
+}

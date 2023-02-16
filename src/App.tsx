@@ -17,7 +17,7 @@ import { BooksList } from './components/booksList/BooksList';
 import { BookPage } from './components/BookPage/BookPage';
 import { useAppDispatch, useAppSelector } from './hooks/hooks';
 import { getUserId } from './store/selectors/manageUserInfoSelectors';
-import { getPhoneFromFb, setEmail, setNick, setPhotoURL, setUserId } from './store/slices/manageUserInfo';
+import { getPhoneFromFb, setEmail, setNick, setPhoneNumber, setPhotoURL, setUserId } from './store/slices/manageUserInfo';
 import ReadBook from './components/readBook/ReadBook';
 
 function App() {
@@ -29,8 +29,8 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       dispatch(setUserId(user ? user.uid : ""));
-      dispatch(setEmail(`${user!.email}`));
-      dispatch(getPhoneFromFb())
+      dispatch(setEmail(user?.email ? user.email : ""));
+      dispatch(user ? getPhoneFromFb() : setPhoneNumber(""))
       dispatch(setNick(user?.displayName
         ? user.displayName
         : ""));

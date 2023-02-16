@@ -1,5 +1,5 @@
 import uniqid from "uniqid";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FC, useEffect, useState } from "react";
 import Pagination from '@mui/material/Pagination';
@@ -8,9 +8,10 @@ import { translate } from "../../helpers/genres";
 import { IBook1 } from "../../types/types";
 import { getError, getLoading } from "../../store/selectors/commonSelectors";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { getBooks, getSearchName, getTotalQuantity } from "../../store/selectors/bookSelectors";
+import { getBooks, getSearchName, getSortParam, getTotalQuantity } from "../../store/selectors/bookSelectors";
 import { getBooksByGenre, getBooksBySearchParam } from "../../store/slices/getBookSlice";
 import { BookCard } from "../card/BookCard";
+import SortBar from "./sortBar/SortBar";
 
 export const BooksList: FC<IBook1> = ({ genre }) => {
 
@@ -21,13 +22,20 @@ export const BooksList: FC<IBook1> = ({ genre }) => {
     const books = useAppSelector(getBooks, shallowEqual);
     const error = useAppSelector(getError);
     const loading = useAppSelector(getLoading);
-    const searchName = useSelector(getSearchName);
-    const totalBookQuantity = useSelector(getTotalQuantity);
+    const sortParam = useAppSelector(getSortParam);
+    const searchName = useAppSelector(getSearchName);
+    const totalBookQuantity = useAppSelector(getTotalQuantity);
 
     const pages = Math.ceil(totalBookQuantity / 27);
     const currentPage = genre ? +location.pathname.slice(7) : +location.pathname.slice(11);
 
     const [page, setPage] = useState(currentPage ? currentPage : 1);
+
+    useEffect(() => {
+        genre
+            ? dispatch(getBooksByGenre({ searchParam: searchName, startIndex: (27 * (page - 1) + 1), sortParam }))
+            : dispatch(getBooksBySearchParam({ searchParam: searchName, startIndex: (27 * (page - 1) + 1), sortParam }))
+    }, [])
 
     useEffect(() => {
         if (!currentPage || currentPage > pages) {
@@ -37,6 +45,7 @@ export const BooksList: FC<IBook1> = ({ genre }) => {
         if (currentPage < page) {
             setPage(1);
         }
+        console.log(currentPage)
     }, [currentPage])
 
     useEffect(() => {
@@ -44,35 +53,35 @@ export const BooksList: FC<IBook1> = ({ genre }) => {
     }, [error])
 
     useEffect(() => {
-        if (!books.length && loading === "idle") navigate(`/`)
-    }, [books.length, loading])
+        if (!books?.length && loading === "idle") navigate(`/`)
+    }, [books?.length, loading])
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        genre
-            ? dispatch(getBooksByGenre({ searchParam: searchName, startIndex: (27 * (currentPage - 1) + 1) }))
-            : dispatch(getBooksBySearchParam({ searchParam: searchName, startIndex: (27 * (currentPage - 1) + 1) }))
         setPage(value);
+        genre
+            ? dispatch(getBooksByGenre({ searchParam: searchName, startIndex: (27 * (value - 1) + 1), sortParam }))
+            : dispatch(getBooksBySearchParam({ searchParam: searchName, startIndex: (27 * (value - 1) + 1), sortParam }))
         genre ? navigate(`/genre/${value}`) : navigate(`/bookslist/${value}`);
     };
 
     return (
-
         <main className='books-list'>
             <div className="books-list__content">
                 {loading === "pending"
                     ? <Loader />
                     : error
                         ? null
-                        : books.length
+                        : books?.length
                             ? <>
                                 {!genre
                                     ? <h2 className="books-list__heading">
-                                        Результаты поиска по запросу "{searchName}" представлены ниже.
+                                        Результаты поиска по запросу <span>{searchName}</span>  представлены ниже.
                                     </h2>
                                     : <h2 className="books-list__heading">
                                         Результаты поиска по жанру <span>{translate[searchName]}</span>  представлены ниже.
                                     </h2>
                                 }
+                                <SortBar genre={genre} />
                                 <div className="books-list__list">
                                     {books.map((book: any) => (
                                         <BookCard key={uniqid()} book={book} />
@@ -89,7 +98,9 @@ export const BooksList: FC<IBook1> = ({ genre }) => {
                                         variant="outlined" />
                                 }
                             </>
-                            : null
+                            : <h2 className="books-list__heading">
+                                По данному запросу не найдено ни одной книги.
+                            </h2>
                 }
             </div>
         </main>

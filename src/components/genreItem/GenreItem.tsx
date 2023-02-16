@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IGEnre } from '../../types/types';
 import { FC } from 'react';
 import { useAppDispatch } from '../../hooks/hooks';
-import { getBooksByGenre } from '../../store/slices/getBookSlice';
+import { setSearchParam, setSortParam } from '../../store/slices/getBookSlice';
 
 const GenreItem: FC<IGEnre> = ({ genre }) => {
     const [img, name] = genre;
@@ -12,8 +12,9 @@ const GenreItem: FC<IGEnre> = ({ genre }) => {
     const navigate = useNavigate();
 
     const handleSearchGenre = () => {
-        dispatch(getBooksByGenre({ searchParam: name, startIndex: 0 }));
-        navigate(`/genre/${name}`);
+        dispatch(setSearchParam(name));
+        dispatch(setSortParam(""));
+        navigate(`/genre/1`);
     }
     return (
         <div className="genre-item" >

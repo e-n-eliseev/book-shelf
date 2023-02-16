@@ -1,32 +1,36 @@
 import { Link } from "react-router-dom";
-import sample from "../../assets/sample.jpg";
 import { FC } from "react";
-import { useAppDispatch } from "../../hooks/hooks";
-import { setCurrentBook } from "../../store/slices/getBookSlice";
+import { bookInfoAdapter } from "../../helpers/bookInfoAdapter";
+import ProgressiveImage from "react-progressive-graceful-image";
+import loadingImg from "../../assets/loading.gif";
+import BasicRating from "../UIComponents/BasicRating";
 
 
 export const BookCard: FC<any> = ({ book }) => {
 
-  const dispatch = useAppDispatch();
-
-  const { id } = book;
-  const { title, categories, authors, publishedDate, imageLinks } = book.volumeInfo;
+  const { id, title, categories, authors, publishedDate, thumbnail, averageRating } = bookInfoAdapter(book);
 
   return (
     <figure className="book" >
       <div className="book__wrapper">
-        <img className="book__img" src={imageLinks?.thumbnail || sample} alt="BookImage" />
+        <ProgressiveImage
+          src={thumbnail}
+          placeholder={loadingImg}
+        >
+          {(src, loading) => <img style={{ opacity: loading ? 0 : 1 }} className="book__img" src={src} alt="BookImage" />}
+        </ProgressiveImage>
       </div>
 
       <figcaption className="book__description" >
-        <h3 className="book__heading">{title ? title : "Нет информации"}</h3>
-        <p className="book__text">Категория: {categories ? categories : "Нет информации"}</p>
-        <p className="book__text">Авторы: {authors ? authors : "Нет информации"}</p>
-        <p className="book__text">Год: {publishedDate ? publishedDate : "Нет информации"}</p>
+        <h3 className="book__heading">{title}</h3>
+        <p className="book__text">Категория: {categories}</p>
+        <p className="book__text">Авторы: {authors}</p>
+        <p className="book__text">Год: {publishedDate}</p>
+        <BasicRating
+          averageRating={+averageRating}
+        />
       </figcaption>
-      <Link className="book__link" to={`/book/${id}`} onClick={() =>
-        dispatch(setCurrentBook(book))
-      }>
+      <Link className="book__link" to={`/book/${id}`} >
         Подробнее...
       </Link>
     </figure >

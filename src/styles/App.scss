@@ -1,8 +1,10 @@
 @import './reset';
 @import './vars';
 @import './mixins';
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100;400;700&family=Mulish:wght@300&family=Noto+Serif:wght@700&family=Raleway:wght@600;700&family=Roboto:wght@400;500;700;900&display=swap');
 
 .App {
+    font-family: 'Raleway', sans-serif;
     height: 100%;
     display: flex;
     min-height: 100vh;
@@ -29,3 +31,6 @@
 @import './loader';
 @import './modal';
 @import './readBook';
+@import './recomended';
+@import './soertBar';
+@import './rating';

@@ -11,7 +11,7 @@ import { DeleteProfile } from './deleteProfile/DeleteProfile';
 const ProfilePage: FC = () => {
 
     const [error, setError] = useState<string>("");
-
+    console.log(error)
     useEffect(() => {
         const timeout = setTimeout(() => setError(""), 2000);
         return () => clearTimeout(timeout)

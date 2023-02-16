@@ -17,7 +17,7 @@ const FavouriteBookCard: FC<IFavouriteBook> = ({ book }) => {
             </div>
 
             <figcaption className="favourite-book__description" >
-                <h3 className="favourite-book__heading">{title ? title : "Нет информации"}</h3>
+                <h3 className="favourite-book__heading">{title}</h3>
             </figcaption>
         </figure >
     );

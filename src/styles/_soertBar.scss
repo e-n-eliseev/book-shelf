@@ -1,0 +1,11 @@
+.sortbar{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 20px 0 20px 0;
+    &__text{
+        @include font(700,$h3-fs)
+    }
+}

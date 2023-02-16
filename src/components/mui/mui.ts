@@ -47,17 +47,28 @@ export const theme = createTheme({
         },
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "#1B3764",
+          fontWeight: "700",
+        },
+        shrink: {
+          marginTop: "-5px",
+        },
+      },
+    },
     MuiPaginationItem: {
       styleOverrides: {
         page: {
           color: "#1B3764",
-          fontSize: "20px",
+          fontSize: "18px",
           fontWeight: "700",
           border: "none",
         },
         icon: {
           color: "#1B3764",
-          fontSize: "30px",
+          fontSize: "28px",
           fontWeight: "700",
         },
       },

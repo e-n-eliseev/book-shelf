@@ -29,9 +29,10 @@ export interface IBooksInfo {
   favouriteBooks: any;
   currentBook: any;
   lastReadBooks: any;
-  feedBack: Array<string>;
+  feedback: IBook2;
   searchParam: string;
   totalBookQuantity: number;
+  sortParam: string;
 }
 export type Info = string | boolean | number;
 export type DBInfo = string | null | undefined;
@@ -41,6 +42,12 @@ export interface IBook1 {
 }
 export interface IBook {
   [key: string]: any;
+}
+export interface IBook2 {
+  [key: string]: string;
+}
+export interface IRating {
+  averageRating: number;
 }
 
 export interface ISubmit {
@@ -95,6 +102,9 @@ export interface IGetBook {
   searchParam: string;
   startIndex: number;
 }
+export interface IGetBooks extends IGetBook {
+  sortParam: string;
+}
 export interface IGetCurrentBook {
   id: string;
 }
@@ -136,4 +146,14 @@ declare global {
     google: any;
     viewer: any;
   }
+}
+
+export interface ITabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+export interface IBasicTabsProps {
+  data: string;
+  feedback: IBook2;
 }

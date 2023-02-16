@@ -2,6 +2,7 @@ import {
   IBook,
   IBooksInfo,
   IGetBook,
+  IGetBooks,
   IGetCurrentBook,
   IState,
 } from "./../../types/types";
@@ -10,18 +11,27 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { bookApiKey } from "../../firebase/firebaseConfig";
 import { maxResults } from "../../helpers/vars";
-import { setError, setLoading, setSuccessLoading } from "./commonSlice";
+import {
+  setError,
+  setIdle,
+  setLoading,
+  setSuccessLoading,
+} from "./commonSlice";
 import { bookAdapter, missingData } from "../../helpers/bookSearch";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
+import { auth } from "../../firebase/firebaseAuth";
 
 export const getBooksBySearchParam = createAsyncThunk(
   "getBooks/getBooksBySearchParam",
-  async ({ searchParam, startIndex }: IGetBook, { dispatch }) => {
+  async ({ searchParam, startIndex, sortParam }: IGetBooks, { dispatch }) => {
     dispatch(setLoading());
     try {
       const booksData = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${searchParam}+inauthor:${searchParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${searchParam}${sortParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
+      );
+      console.log(
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${searchParam}${sortParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
       );
       dispatch(setTotalBooksQuantity(booksData.data.totalItems));
       dispatch(setSearchParam(searchParam));
@@ -31,16 +41,18 @@ export const getBooksBySearchParam = createAsyncThunk(
     } catch (error) {
       console.log(error);
       dispatch(setError(`${error}`));
+    } finally {
+      setTimeout(() => dispatch(setIdle()), 2000);
     }
   }
 );
 export const getBooksByGenre = createAsyncThunk(
   "getBooks/getBooksByGenre",
-  async ({ searchParam, startIndex }: IGetBook, { dispatch }) => {
+  async ({ searchParam, startIndex, sortParam }: IGetBooks, { dispatch }) => {
     dispatch(setLoading());
     try {
       const booksData = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=subject:${searchParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
+        `https://www.googleapis.com/books/v1/volumes?q=subject:${searchParam}${sortParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
       );
       dispatch(setTotalBooksQuantity(booksData.data.totalItems));
       dispatch(setSearchParam(searchParam));
@@ -49,6 +61,24 @@ export const getBooksByGenre = createAsyncThunk(
     } catch (error) {
       console.log(error);
       dispatch(setError(`${error}`));
+    } finally {
+      setTimeout(() => dispatch(setIdle()), 2000);
+    }
+  }
+);
+export const getBooksByCategory = createAsyncThunk(
+  "getBooks/getBooksByCategory",
+  async ({ searchParam, startIndex }: IGetBook, { dispatch }) => {
+    try {
+      const booksData = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes?q=subject:${searchParam}&key=${bookApiKey}&maxResults=3&startIndex=${startIndex}`
+      );
+      return booksData.data;
+    } catch (error) {
+      console.log(error);
+      dispatch(setError(`${error}`));
+    } finally {
+      setTimeout(() => dispatch(setIdle()), 2000);
     }
   }
 );
@@ -65,6 +95,8 @@ export const getCurrentBookInfo = createAsyncThunk(
     } catch (error) {
       console.log(error);
       dispatch(setError(`${error}`));
+    } finally {
+      setTimeout(() => dispatch(setIdle()), 2000);
     }
   }
 );
@@ -73,7 +105,9 @@ export const getFavouriteBooksInfo = createAsyncThunk(
   async (_, { getState }) => {
     try {
       const state = getState() as IState;
-      const userId = state.manageUserInfo.userId;
+      const userId = auth.currentUser?.uid || state.manageUserInfo.userId;
+      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      if (!userId) return {};
       const favouriteBooks = await getDoc(
         doc(db, `users/${userId}/favourites/items`)
       );
@@ -89,7 +123,9 @@ export const getLastReadBooksInfo = createAsyncThunk(
     dispatch(setLoading());
     try {
       const state = getState() as IState;
-      const userId = state.manageUserInfo.userId;
+      const userId = auth.currentUser?.uid || state.manageUserInfo.userId;
+      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      if (!userId) return [];
       const lastReadBooks = await getDoc(
         doc(db, `users/${userId}/recent/items`)
       );
@@ -102,12 +138,14 @@ export const getLastReadBooksInfo = createAsyncThunk(
 );
 export const setLastReadBooksFB = createAsyncThunk(
   "getBooks/getLastReadBooksInfo",
-  async (book: IBook, { getState }) => {
+  async (book: IBook, { dispatch, getState }) => {
     try {
+      dispatch(getLastReadBooksInfo());
       const state = getState() as IState;
       const lastRead: IBook[] = state.getBooks.lastReadBooks;
-      const userId = state.manageUserInfo.userId;
-      // const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      const userId = auth.currentUser?.uid || state.manageUserInfo.userId;
+      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      if (!userId) return;
       const isInTheList =
         lastRead.findIndex((item: IBook) => item.id === book.id) === -1;
       if (isInTheList) {
@@ -137,10 +175,11 @@ const initialState: IBooksInfo = {
   lastReadBooks: [],
   books: [],
   currentBook: {},
-  feedBack: [],
+  feedback: {},
   searchParam: "",
   totalBookQuantity: 0,
   favouriteBooks: {},
+  sortParam: "",
 };
 
 export const getBookSlice = createSlice({
@@ -159,12 +198,20 @@ export const getBookSlice = createSlice({
     setCurrentBook: (state: IBooksInfo, action: PayloadAction<string>) => {
       state.currentBook = action.payload;
     },
+    setSortParam: (state: IBooksInfo, action: PayloadAction<string>) => {
+      state.sortParam = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getBooksBySearchParam.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.books = missingData(action.payload);
     });
     builder.addCase(getBooksByGenre.fulfilled, (state, action) => {
+      state.books = missingData(action.payload);
+    });
+    builder.addCase(getBooksByCategory.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.books = missingData(action.payload);
     });
     builder.addCase(getCurrentBookInfo.fulfilled, (state, action) => {
@@ -179,7 +226,11 @@ export const getBookSlice = createSlice({
   },
 });
 
-export const { setTotalBooksQuantity, setSearchParam, setCurrentBook } =
-  getBookSlice.actions;
+export const {
+  setTotalBooksQuantity,
+  setSearchParam,
+  setCurrentBook,
+  setSortParam,
+} = getBookSlice.actions;
 
 export default getBookSlice.reducer;

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch } from '../../hooks/hooks';
-import { getBooksBySearchParam } from '../../store/slices/getBookSlice';
+import { setSearchParam, setSortParam } from '../../store/slices/getBookSlice';
 
 const SearchForm: FC = () => {
 
@@ -35,7 +35,8 @@ const SearchForm: FC = () => {
                 navigate("/bookslist/1")
             }
         }
-        dispatch(getBooksBySearchParam({ searchParam: searchName, startIndex: 0 }));
+        dispatch(setSortParam(""));
+        dispatch(setSearchParam(searchName));
         setSearchName("");
     }
 
