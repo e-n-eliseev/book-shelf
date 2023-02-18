@@ -7,7 +7,7 @@ import DownloadBtn from './downloadBtn/DownloadBtn';
 import { getError, getLoading } from '../../store/selectors/commonSelectors';
 import Loader from '../UIComponents/Loader';
 import { FC, useEffect, useLayoutEffect } from 'react';
-import { DBInfo, IAuthProps, IBook, IBook2 } from '../../types/types';
+import { DBInfo, IAuthProps, IBook, IObjectBase } from '../../types/types';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { getBookComments, getCurrentBook } from "../../store/selectors/bookSelectors";
 import { getBookCommentsFB, getCurrentBookInfo, getFavouriteBooksInfo } from "../../store/slices/getBookSlice";
@@ -31,7 +31,7 @@ export const BookPage: FC<IAuthProps> = ({ authed }) => {
     const currentBook = useAppSelector<IBook>(getCurrentBook, shallowEqual);
     const comments = useAppSelector(getBookComments);
 
-    let book: IBook2 = {};
+    let book: IObjectBase = {};
 
     useLayoutEffect(() => {
         dispatch(getCurrentBookInfo({ id: `${params.id}` }));

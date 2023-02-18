@@ -19,7 +19,6 @@ const LoginForm: FC<ISubmit> = ({ onSubmit }) => {
     });
     //обработчик отправки формы
     const onSubmitForm = (data: ILogIn) => {
-        console.log(data.email, data.pasw)
         const { email, pasw } = data
         onSubmit({ email, pasw });
         reset();

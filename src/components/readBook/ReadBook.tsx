@@ -24,7 +24,6 @@ const ReadBook: FC = () => {
     const initialize = () => {
         setBtnVision(false)
         let viewer = new window.google.books.DefaultViewer(canvasRef.current);
-        console.log(canvasRef.current)
         viewer.load(params.id);
     }
 

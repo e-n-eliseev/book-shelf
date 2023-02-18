@@ -1,7 +1,7 @@
-import { IBook, IBook2 } from "../types/types";
+import { IBook, IObjectBase } from "../types/types";
 import sample from "../assets/sample.jpg";
 
-export const bookInfoAdapter = (currentBook: IBook): IBook2 => {
+export const bookInfoAdapter = (currentBook: IBook): IObjectBase => {
   return {
     title: currentBook?.volumeInfo?.title || "Нет информации",
     categories: currentBook?.volumeInfo?.categories || "Нет информации",

@@ -5,7 +5,7 @@ import { FC, useEffect, useState } from "react";
 import Pagination from '@mui/material/Pagination';
 import Loader from "../UIComponents/Loader";
 import { translate } from "../../helpers/genres";
-import { IBook1 } from "../../types/types";
+import { IBookBase } from "../../types/types";
 import { getError, getLoading } from "../../store/selectors/commonSelectors";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getBooks, getSearchName, getSortParam, getTotalQuantity } from "../../store/selectors/bookSelectors";
@@ -13,7 +13,7 @@ import { getBooksByGenre, getBooksBySearchParam } from "../../store/slices/getBo
 import { BookCard } from "../card/BookCard";
 import SortBar from "./sortBar/SortBar";
 
-export const BooksList: FC<IBook1> = ({ genre }) => {
+export const BooksList: FC<IBookBase> = ({ genre }) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -45,7 +45,6 @@ export const BooksList: FC<IBook1> = ({ genre }) => {
         if (currentPage < page) {
             setPage(1);
         }
-        console.log(currentPage)
     }, [currentPage])
 
     useEffect(() => {

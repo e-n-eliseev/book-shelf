@@ -3,7 +3,7 @@ import { useState, FC } from "react";
 import { updateProfile } from "firebase/auth";
 import SubmitButtons from '../../UIComponents/SubmitButtons';
 import { nameValidation } from "../../../helpers/vars";
-import { ISetState, IBook1 } from '../../../types/types';
+import { ISetState, IBookBase } from '../../../types/types';
 import { auth } from "../../../firebase/firebaseAuth";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
@@ -23,12 +23,12 @@ const ChangeNameForm: FC<ISetState> = ({ setError }) => {
         handleSubmit,
         reset,
         formState: { errors, isValid }
-    } = useForm<IBook1>({
+    } = useForm<IBookBase>({
         mode: "all"
     });
 
     //обработчик отправки формы
-    const handleSubmitName = async (data: IBook1) => {
+    const handleSubmitName = async (data: IBookBase) => {
         if (auth.currentUser) {
             try {
                 // setName(data.nick);

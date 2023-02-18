@@ -4,7 +4,7 @@ import { db } from "../../../firebase/firebase";
 import SubmitButtons from '../../UIComponents/SubmitButtons';
 import { phoneValidation } from "../../../helpers/vars";
 import { doc, setDoc } from "firebase/firestore";
-import { IBook1, ISetState } from "../../../types/types";
+import { IBookBase, ISetState } from "../../../types/types";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { getPhoneNumber, getUserId } from "../../../store/selectors/manageUserInfoSelectors";
@@ -23,14 +23,14 @@ const ChangePhoneForm: FC<ISetState> = () => {
         handleSubmit,
         reset,
         formState: { errors, isValid }
-    } = useForm<IBook1>({
+    } = useForm<IBookBase>({
         mode: "all"
     });
 
-    const handleSubmitPhone = async (data: IBook1) => {
+    const handleSubmitPhone = async (data: IBookBase) => {
         setIsChanging(false);
-        await setDoc(doc(db, "users", userId), { phoneNumber: data.phoneNumber });
         dispatch(setPhoneNumber(`${data.phoneNumber}`));
+        await setDoc(doc(db, "users", userId), { phoneNumber: data.phoneNumber });
         reset();
     }
 

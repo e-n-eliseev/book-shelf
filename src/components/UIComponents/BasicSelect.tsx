@@ -7,10 +7,10 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { getBooksByGenre, getBooksBySearchParam, setSortParam } from '../../store/slices/getBookSlice';
 import { getSearchName, getSortParam } from '../../store/selectors/bookSelectors';
 import { FC } from 'react';
-import { IBook1 } from '../../types/types';
+import { IBookBase } from '../../types/types';
 import { useNavigate } from 'react-router-dom';
 
-const BasicSelect: FC<IBook1> = ({ genre }) => {
+const BasicSelect: FC<IBookBase> = ({ genre }) => {
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();

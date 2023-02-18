@@ -29,6 +29,7 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       dispatch(setUserId(user ? user.uid : ""));
+      localStorage.setItem("userID", user ? user.uid : "");
       dispatch(setEmail(user?.email ? user.email : ""));
       dispatch(user ? getPhoneFromFb() : setPhoneNumber(""))
       dispatch(setNick(user?.displayName

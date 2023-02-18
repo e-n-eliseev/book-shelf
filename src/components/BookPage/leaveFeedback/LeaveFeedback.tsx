@@ -12,12 +12,12 @@ export const LeaveFeedback: FC<ICommentProps> = ({ authed, bookId, comments }) =
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const dispatch = useAppDispatch();
-    const userNick = useAppSelector(getNick);
-
+    const userNick = useAppSelector(getNick) || "UFO";
+    const userId = localStorage.getItem("userID") || "";
 
     const leaveComment = async (data: string) => {
         dispatch(setBookCommentFB({ bookId, comment: data }));
-        dispatch(setBookComment({ ...comments, [`${userNick}`]: data }))
+        dispatch(setBookComment({ ...comments, [userId]: [userNick, data] }))
     }
     return (
         <div>

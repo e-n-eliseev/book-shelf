@@ -1,4 +1,4 @@
-import { IBook1 } from "./../types/types";
+import { IObjectBase } from "./../types/types";
 import adventure from "../assets/adventure.jpg";
 import action from "../assets/action.jpg";
 import animals from "../assets/animals.jpg";
@@ -30,7 +30,7 @@ import technical from "../assets/technical.jpg";
 import computers from "../assets/computers.jpg";
 import underwater from "../assets/underwater.jpg";
 
-export const genres = [
+export const genres: string[][] = [
   [adventure, "adventure"],
   [action, "action"],
   [animals, "animals"],
@@ -62,7 +62,7 @@ export const genres = [
   [computers, "computers"],
   [underwater, "ocean"],
 ];
-export const translate: IBook1 = {
+export const translate: IObjectBase = {
   action: "боевик",
   adventure: "приключения",
   animals: "животные",

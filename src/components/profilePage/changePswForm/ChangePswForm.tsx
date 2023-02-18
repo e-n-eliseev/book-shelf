@@ -7,7 +7,7 @@ import ModalWindow from '../../UIComponents/ModalWindow';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { passwordValidation } from '../../../helpers/vars';
 import ModalWindowResetPsw from '../../UIComponents/ModalWindowResetPsw';
-import { IBook1, Info, ISetState } from '../../../types/types';
+import { IBookBase, Info, ISetState } from '../../../types/types';
 import { useForm } from "react-hook-form";
 import { reauthenticate } from '../../../firebase/firebaseAuth';
 
@@ -32,11 +32,11 @@ const ChangePswForm: FC<ISetState> = ({ setError }) => {
         reset,
         getValues,
         formState: { errors, isValid }
-    } = useForm<IBook1>({
+    } = useForm<IBookBase>({
         mode: "all"
     });
 
-    const handleChangePwd = async (data: IBook1) => {
+    const handleChangePwd = async (data: IBookBase) => {
         try {
             const authData = await reauthenticate(`${data}`);
             if (newPassword === repeatPassword) {

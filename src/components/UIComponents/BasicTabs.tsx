@@ -55,7 +55,7 @@ const BasicTabs: React.FC<IBasicTabsProps> = ({ data, comments, authed }) => {
       <TabPanel value={value} index={1}>
         {authed
           ? Object.keys(comments).length
-            ? Object.keys(comments).map((nick) => <BookComment key={uniqid()} userNick={nick} />)
+            ? Object.keys(comments).map((userId) => <BookComment key={uniqid()} userId={userId} />)
             : "Этой книге пока не оставили комментариев"
           : "Авторизуйтесь для того, чтобы увидеть комментарии пользователей."
         }

@@ -1,6 +1,6 @@
-import { IImage } from "../types/types";
+import { IBook, IImage } from "../types/types";
 
-export const randomBooks1 = [
+export const randomBooks1: IBook[] = [
   {
     kind: "books#volume",
     id: "Lhg_AQAAIAAJ",

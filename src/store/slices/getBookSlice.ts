@@ -1,11 +1,12 @@
 import {
   IBook,
-  IBook2,
   IBooksInfo,
   IGetBook,
   IGetBooks,
   IGetCurrentBook,
-  IState,
+  ICommonInfo,
+  IBookComment,
+  IObjectBase,
 } from "./../../types/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
@@ -21,7 +22,6 @@ import {
 import { bookAdapter, missingData } from "../../helpers/bookSearch";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { auth } from "../../firebase/firebaseAuth";
 
 export const getBooksBySearchParam = createAsyncThunk(
   "getBooks/getBooksBySearchParam",
@@ -31,13 +31,9 @@ export const getBooksBySearchParam = createAsyncThunk(
       const booksData = await axios.get(
         `https://www.googleapis.com/books/v1/volumes?q=intitle:${searchParam}${sortParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
       );
-      console.log(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${searchParam}${sortParam}&key=${bookApiKey}&maxResults=${maxResults}&startIndex=${startIndex}`
-      );
       dispatch(setTotalBooksQuantity(booksData.data.totalItems));
       dispatch(setSearchParam(searchParam));
       dispatch(setSuccessLoading());
-      console.log(booksData);
       return booksData.data;
     } catch (error) {
       console.log(error);
@@ -105,9 +101,9 @@ export const getFavouriteBooksInfo = createAsyncThunk(
   "getBooks/getFavouriteBooksInfo",
   async (_, { getState }) => {
     try {
-      const state = getState() as IState;
-      const userId = auth.currentUser?.uid || state.manageUserInfo.userId;
-      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      const state = getState() as ICommonInfo;
+      const userId =
+        localStorage.getItem("userID") || state.manageUserInfo.userId;
       if (!userId) return {};
       const favouriteBooks = await getDoc(
         doc(db, `users/${userId}/favourites/items`)
@@ -123,9 +119,9 @@ export const getLastReadBooksInfo = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     dispatch(setLoading());
     try {
-      const state = getState() as IState;
-      const userId = auth.currentUser?.uid || state.manageUserInfo.userId;
-      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      const state = getState() as ICommonInfo;
+      const userId =
+        localStorage.getItem("userID") || state.manageUserInfo.userId;
       if (!userId) return [];
       const lastReadBooks = await getDoc(
         doc(db, `users/${userId}/recent/items`)
@@ -142,10 +138,10 @@ export const setLastReadBooksFB = createAsyncThunk(
   async (book: IBook, { dispatch, getState }) => {
     try {
       dispatch(getLastReadBooksInfo());
-      const state = getState() as IState;
-      const lastRead: IBook[] = state.getBooks.lastReadBooks;
-      const userId = auth.currentUser?.uid || state.manageUserInfo.userId;
-      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      const state = getState() as ICommonInfo;
+      const lastRead = state.getBooks.lastReadBooks;
+      const userId =
+        localStorage.getItem("userID") || state.manageUserInfo.userId;
       if (!userId) return;
       const isInTheList =
         lastRead.findIndex((item: IBook) => item.id === book.id) === -1;
@@ -173,14 +169,15 @@ export const setLastReadBooksFB = createAsyncThunk(
 );
 export const setBookCommentFB = createAsyncThunk(
   "getBooks/setBookCommentFB",
-  async ({ bookId, comment }: IBook2, { dispatch, getState }) => {
+  async ({ bookId, comment }: IObjectBase, { dispatch, getState }) => {
     try {
-      const state = getState() as IState;
+      const state = getState() as ICommonInfo;
       const userNick = state.manageUserInfo.nick || "UFO";
-      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      const userId =
+        localStorage.getItem("userID") || state.manageUserInfo.userId;
       await setDoc(
         doc(db, `books/${bookId}`),
-        { [userNick]: comment },
+        { [userId]: [userNick, comment] },
         { merge: true }
       );
     } catch (error) {
@@ -205,7 +202,6 @@ const initialState: IBooksInfo = {
   lastReadBooks: [],
   books: [],
   currentBook: {},
-  feedback: {},
   searchParam: "",
   totalBookQuantity: 0,
   favouriteBooks: {},
@@ -226,13 +222,16 @@ export const getBookSlice = createSlice({
     setSearchParam: (state: IBooksInfo, action: PayloadAction<string>) => {
       state.searchParam = action.payload;
     },
-    setCurrentBook: (state: IBooksInfo, action: PayloadAction<string>) => {
+    setCurrentBook: (state: IBooksInfo, action: PayloadAction<IBook>) => {
       state.currentBook = action.payload;
     },
     setSortParam: (state: IBooksInfo, action: PayloadAction<string>) => {
       state.sortParam = action.payload;
     },
-    setBookComment: (state: IBooksInfo, action: PayloadAction<IBook2>) => {
+    setBookComment: (
+      state: IBooksInfo,
+      action: PayloadAction<IBookComment>
+    ) => {
       state.currentBookComment = action.payload;
     },
   },
@@ -250,7 +249,7 @@ export const getBookSlice = createSlice({
       state.currentBook = bookAdapter(action.payload);
     });
     builder.addCase(getFavouriteBooksInfo.fulfilled, (state, action) => {
-      state.favouriteBooks = action.payload;
+      state.favouriteBooks = action.payload || {};
     });
     builder.addCase(getLastReadBooksInfo.fulfilled, (state, action) => {
       state.lastReadBooks = action.payload;

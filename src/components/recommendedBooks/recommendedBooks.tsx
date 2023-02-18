@@ -1,12 +1,12 @@
 import { BookCard } from "../card/BookCard";
 import uniqid from "uniqid";
 import { FC, useEffect } from "react";
-import { IBook2 } from "../../types/types";
+import { IObjectBase } from "../../types/types";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getBooks } from "../../store/selectors/bookSelectors";
 import { getBooksByCategory } from "../../store/slices/getBookSlice";
 
-const RecommendedBooks: FC<IBook2> = ({ categories }) => {
+const RecommendedBooks: FC<IObjectBase> = ({ categories }) => {
 
     const recomendedBooks = useAppSelector(getBooks)
     const dispatch = useAppDispatch();

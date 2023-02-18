@@ -4,7 +4,7 @@ import { updateEmail } from "firebase/auth";
 import SubmitButtons from '../../UIComponents/SubmitButtons';
 import ModalWindow from "../../UIComponents/ModalWindow";
 import { emailValidation } from "../../../helpers/vars";
-import { IBook1, ISetState } from "../../../types/types";
+import { IBookBase, ISetState } from "../../../types/types";
 import { useForm } from "react-hook-form";
 import { reauthenticate } from "../../../firebase/firebaseAuth";
 import { getEmail } from "../../../store/selectors/manageUserInfoSelectors";
@@ -28,7 +28,7 @@ const ChangeEmailForm: FC<ISetState> = ({ setError }) => {
         reset,
         getValues,
         formState: { errors, isValid }
-    } = useForm<IBook1>({
+    } = useForm<IBookBase>({
         mode: "all"
     });
 

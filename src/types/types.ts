@@ -1,19 +1,43 @@
 import { FormEventHandler, Dispatch, SetStateAction } from "react";
 
+export interface ICommonInfo {
+  common: IStatus;
+  getBooks: IBooksInfo;
+  manageUserInfo: IUserInfo;
+}
+
+export interface IUserInfo {
+  userId: string;
+  phoneNumber: string;
+  nick: string;
+  email: string;
+  photoURL: string;
+}
+
+export interface IBookComment {
+  [key: string]: string | string[];
+}
+
+export interface IBooksInfo {
+  books: IBook;
+  favouriteBooks: IBook;
+  currentBook: IBook;
+  lastReadBooks: IBook[];
+  searchParam: string;
+  totalBookQuantity: number;
+  sortParam: string;
+  currentBookComment: IBookComment;
+}
+
 export interface IAuthProps {
   authed?: string | boolean;
 }
 
 export interface ICommentProps extends IAuthProps {
   bookId: string;
-  comments: IBook2;
+  comments: IBookComment;
 }
 
-export interface IState {
-  common: IStatus;
-  getBooks: IBooksInfo;
-  manageUserInfo: IUserInfo;
-}
 export interface ILogIn {
   email: string;
   pasw: string;
@@ -29,28 +53,20 @@ export interface IStatus {
   loading: string;
   error: null | string;
 }
-export interface IBooksInfo {
-  books: any;
-  favouriteBooks: any;
-  currentBook: any;
-  lastReadBooks: any;
-  feedback: IBook2;
-  searchParam: string;
-  totalBookQuantity: number;
-  sortParam: string;
-  currentBookComment: IBook2;
-}
+
 export type Info = string | boolean | number;
 export type DBInfo = string | null | undefined;
 
-export interface IBook1 {
+export interface IBookBase {
   [key: string]: Info;
 }
+
+export interface IObjectBase {
+  [key: string]: string;
+}
+
 export interface IBook {
   [key: string]: any;
-}
-export interface IBook2 {
-  [key: string]: string;
 }
 export interface IRating {
   averageRating: number;
@@ -84,7 +100,7 @@ export interface IModal {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   confirmFunction?: any;
-  profile?: any;
+  profile?: boolean;
 }
 
 export interface IGEnre {
@@ -121,38 +137,23 @@ export interface IButton extends IAuthProps {
   handleDoing?: () => void;
   children?: React.ReactNode;
 }
-export interface IButtonDwn extends IAuthProps {
-  link: string;
-}
-export interface IButtonFvt extends IAuthProps {
-  book: any;
-}
-export interface IFavouriteBookInfo {
-  id: string;
+
+export interface IFavouriteBookInfo extends IGetCurrentBook {
   title: string;
   thumbnail: string;
-}
-export interface IUserInfo {
-  userId: string;
-  phoneNumber: string;
-  nick: string;
-  email: string;
-  photoURL: string;
 }
 
 export interface IFavourite {
   path: string;
 }
 export interface IFavouriteBook {
-  book: any;
+  book: IBook;
 }
 
-declare global {
-  interface Window {
-    google: any;
-    viewer: any;
-  }
+export interface IButtonDwn extends IAuthProps {
+  link: string;
 }
+export interface IButtonFvt extends IAuthProps, IFavouriteBook {}
 
 export interface ITabPanelProps {
   children?: React.ReactNode;
@@ -161,5 +162,12 @@ export interface ITabPanelProps {
 }
 export interface IBasicTabsProps extends IAuthProps {
   data: string;
-  comments: IBook2;
+  comments: IBookComment;
+}
+
+declare global {
+  interface Window {
+    google: any;
+    viewer: any;
+  }
 }
