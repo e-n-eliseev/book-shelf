@@ -21,5 +21,11 @@
         border: 3px solid $primary-bg-color;
         border-radius: 15px;
         text-overflow: ellipsis;
+        @include font(700,$p2-fs);
+        &--comment{
+            height: 200px;
+            overflow: hidden;
+
+        }
     }
 }

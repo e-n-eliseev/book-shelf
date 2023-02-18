@@ -58,6 +58,15 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: "#1B3764",
+          fontWeight: "700",
+          fontSize: "16px",
+        },
+      },
+    },
     MuiPaginationItem: {
       styleOverrides: {
         page: {

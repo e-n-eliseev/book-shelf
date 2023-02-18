@@ -17,7 +17,7 @@ import { BooksList } from './components/booksList/BooksList';
 import { BookPage } from './components/BookPage/BookPage';
 import { useAppDispatch, useAppSelector } from './hooks/hooks';
 import { getUserId } from './store/selectors/manageUserInfoSelectors';
-import { getPhoneFromFb, setEmail, setNick, setPhoneNumber, setPhotoURL, setUserId } from './store/slices/manageUserInfo';
+import { getPhoneFromFb, setEmail, setNick, setPhoneNumber, setPhotoURL, setUserId } from './store/slices/manageUserInfoSlice';
 import ReadBook from './components/readBook/ReadBook';
 
 function App() {

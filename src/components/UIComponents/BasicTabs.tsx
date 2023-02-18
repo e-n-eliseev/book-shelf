@@ -1,10 +1,10 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { IBasicTabsProps, ITabPanelProps } from '../../types/types';
+import BookComment from './BookComment';
+import uniqid from 'uniqid';
 
 const TabPanel: React.FC<ITabPanelProps> = (props) => {
   const { children, value, index, ...other } = props;
@@ -19,7 +19,7 @@ const TabPanel: React.FC<ITabPanelProps> = (props) => {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -33,7 +33,7 @@ const a11yProps = (index: number) => {
   };
 }
 
-const BasicTabs: React.FC<IBasicTabsProps> = ({ data, feedback }) => {
+const BasicTabs: React.FC<IBasicTabsProps> = ({ data, comments, authed }) => {
 
   const [value, setValue] = React.useState(0);
 
@@ -53,7 +53,12 @@ const BasicTabs: React.FC<IBasicTabsProps> = ({ data, feedback }) => {
         {data}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        feedback
+        {authed
+          ? Object.keys(comments).length
+            ? Object.keys(comments).map((nick) => <BookComment key={uniqid()} userNick={nick} />)
+            : "Этой книге пока не оставили комментариев"
+          : "Авторизуйтесь для того, чтобы увидеть комментарии пользователей."
+        }
       </TabPanel>
     </Box>
   );

@@ -8,7 +8,7 @@ import { IBook1, ISetState } from "../../../types/types";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { getPhoneNumber, getUserId } from "../../../store/selectors/manageUserInfoSelectors";
-import { setPhoneNumber } from "../../../store/slices/manageUserInfo";
+import { setPhoneNumber } from "../../../store/slices/manageUserInfoSlice";
 
 const ChangePhoneForm: FC<ISetState> = () => {
 

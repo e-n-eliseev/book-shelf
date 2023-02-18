@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import LoginForm from "./loginForm/LoginForm";
 import HomeButton from "../UIComponents/HomeButton";
 import { IAuthProps, ILogIn } from "../../types/types";
@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getError, getLoading } from "../../store/selectors/commonSelectors";
 import { setIdle } from "../../store/slices/commonSlice";
 import Loader from "../UIComponents/Loader";
-import { getSignIn, getSignUp } from "../../store/slices/manageUserInfo";
+import { getSignIn, getSignUp } from "../../store/slices/manageUserInfoSlice";
 
 const LogIn: FC<IAuthProps> = ({ authed }) => {
 
@@ -22,8 +22,7 @@ const LogIn: FC<IAuthProps> = ({ authed }) => {
     };
     //сброс ошибки авторизации через 2 сек
     useEffect(() => {
-        const timeout = setTimeout(() => dispatch(setIdle()), 2000);
-        return () => clearTimeout(timeout)
+        setTimeout(() => dispatch(setIdle()), 2000);
     }, [error])
 
     return (
@@ -49,7 +48,7 @@ const LogIn: FC<IAuthProps> = ({ authed }) => {
                     <p className="logIn__text">
                         <HomeButton />
                     </p>
-                    {error && <h2 className="error">{error}</h2>}
+                    {error && <h2 className="error">Произошла ошибка</h2>}
                 </div>
             }
         </main >

@@ -1,5 +1,6 @@
 import {
   IBook,
+  IBook2,
   IBooksInfo,
   IGetBook,
   IGetBooks,
@@ -137,7 +138,7 @@ export const getLastReadBooksInfo = createAsyncThunk(
   }
 );
 export const setLastReadBooksFB = createAsyncThunk(
-  "getBooks/getLastReadBooksInfo",
+  "getBooks/setLastReadBooksFB",
   async (book: IBook, { dispatch, getState }) => {
     try {
       dispatch(getLastReadBooksInfo());
@@ -170,6 +171,35 @@ export const setLastReadBooksFB = createAsyncThunk(
     }
   }
 );
+export const setBookCommentFB = createAsyncThunk(
+  "getBooks/setBookCommentFB",
+  async ({ bookId, comment }: IBook2, { dispatch, getState }) => {
+    try {
+      const state = getState() as IState;
+      const userNick = state.manageUserInfo.nick || "UFO";
+      //const userId = "Ecq6HrbY5cPKtGhcrJN7UrJkTxq2";
+      await setDoc(
+        doc(db, `books/${bookId}`),
+        { [userNick]: comment },
+        { merge: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const getBookCommentsFB = createAsyncThunk(
+  "getBooks/getBookCommentsFB",
+  async (bookId: string, { dispatch }) => {
+    try {
+      const bookComments = await getDoc(doc(db, `books/${bookId}`));
+      const comments = bookComments?.data() || {};
+      dispatch(setBookComment(comments));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 const initialState: IBooksInfo = {
   lastReadBooks: [],
@@ -180,6 +210,7 @@ const initialState: IBooksInfo = {
   totalBookQuantity: 0,
   favouriteBooks: {},
   sortParam: "",
+  currentBookComment: {},
 };
 
 export const getBookSlice = createSlice({
@@ -201,17 +232,18 @@ export const getBookSlice = createSlice({
     setSortParam: (state: IBooksInfo, action: PayloadAction<string>) => {
       state.sortParam = action.payload;
     },
+    setBookComment: (state: IBooksInfo, action: PayloadAction<IBook2>) => {
+      state.currentBookComment = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getBooksBySearchParam.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.books = missingData(action.payload);
     });
     builder.addCase(getBooksByGenre.fulfilled, (state, action) => {
       state.books = missingData(action.payload);
     });
     builder.addCase(getBooksByCategory.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.books = missingData(action.payload);
     });
     builder.addCase(getCurrentBookInfo.fulfilled, (state, action) => {
@@ -231,6 +263,7 @@ export const {
   setSearchParam,
   setCurrentBook,
   setSortParam,
+  setBookComment,
 } = getBookSlice.actions;
 
 export default getBookSlice.reducer;

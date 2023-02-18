@@ -11,7 +11,7 @@ import { fileCheck } from "../../../helpers/uploadFileToFirebase";
 import { ISetState } from "../../../types/types";
 import { getPhotoURL } from "../../../store/selectors/manageUserInfoSelectors";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
-import { setPhotoURL } from "../../../store/slices/manageUserInfo";
+import { setPhotoURL } from "../../../store/slices/manageUserInfoSlice";
 import ProgressiveImage from "react-progressive-graceful-image";
 import loadingImg from "../../../assets/loading.gif";
 

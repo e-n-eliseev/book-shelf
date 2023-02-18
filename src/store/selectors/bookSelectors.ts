@@ -10,3 +10,5 @@ export const getFavouriteBooks = (state: RootState) =>
 export const getLastReadBooks = (state: RootState) =>
   state.getBooks.lastReadBooks;
 export const getSortParam = (state: RootState) => state.getBooks.sortParam;
+export const getBookComments = (state: RootState) =>
+  state.getBooks.currentBookComment;

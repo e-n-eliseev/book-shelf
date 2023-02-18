@@ -1,4 +1,4 @@
-import { ILogIn } from "./../../types/types";
+import { ILogIn } from "../../types/types";
 import { IUserInfo } from "../../types/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";

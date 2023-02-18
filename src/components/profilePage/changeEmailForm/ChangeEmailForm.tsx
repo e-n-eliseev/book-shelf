@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { reauthenticate } from "../../../firebase/firebaseAuth";
 import { getEmail } from "../../../store/selectors/manageUserInfoSelectors";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
-import { setEmail } from "../../../store/slices/manageUserInfo";
+import { setEmail } from "../../../store/slices/manageUserInfoSlice";
 
 
 const ChangeEmailForm: FC<ISetState> = ({ setError }) => {

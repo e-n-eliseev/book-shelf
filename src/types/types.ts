@@ -4,6 +4,11 @@ export interface IAuthProps {
   authed?: string | boolean;
 }
 
+export interface ICommentProps extends IAuthProps {
+  bookId: string;
+  comments: IBook2;
+}
+
 export interface IState {
   common: IStatus;
   getBooks: IBooksInfo;
@@ -33,6 +38,7 @@ export interface IBooksInfo {
   searchParam: string;
   totalBookQuantity: number;
   sortParam: string;
+  currentBookComment: IBook2;
 }
 export type Info = string | boolean | number;
 export type DBInfo = string | null | undefined;
@@ -153,7 +159,7 @@ export interface ITabPanelProps {
   index: number;
   value: number;
 }
-export interface IBasicTabsProps {
+export interface IBasicTabsProps extends IAuthProps {
   data: string;
-  feedback: IBook2;
+  comments: IBook2;
 }

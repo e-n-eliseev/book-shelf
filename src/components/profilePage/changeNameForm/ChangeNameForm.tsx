@@ -7,7 +7,7 @@ import { ISetState, IBook1 } from '../../../types/types';
 import { auth } from "../../../firebase/firebaseAuth";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
-import { setNick } from "../../../store/slices/manageUserInfo";
+import { setNick } from "../../../store/slices/manageUserInfoSlice";
 import { getNick } from "../../../store/selectors/manageUserInfoSelectors";
 
 

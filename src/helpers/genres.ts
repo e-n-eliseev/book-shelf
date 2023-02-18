@@ -3,7 +3,7 @@ import adventure from "../assets/adventure.jpg";
 import action from "../assets/action.jpg";
 import animals from "../assets/animals.jpg";
 import biography from "../assets/biography.jpg";
-import botanic from "../assets/botanic.jpg";
+import gardening from "../assets/botanic.jpg";
 import cars from "../assets/cars.jpg";
 import children from "../assets/children.jpg";
 import classic from "../assets/classic.jpg";
@@ -35,30 +35,30 @@ export const genres = [
   [action, "action"],
   [animals, "animals"],
   [biography, "biography"],
-  [botanic, "botanic"],
+  [gardening, "gardening"],
   [cars, "cars"],
   [children, "children"],
   [classic, "classic"],
   [cooking, "cooking"],
   [detective, "detective"],
   [dictionary, "dictionary"],
-  [fantastic, "fantastic"],
+  [fantastic, "mystery"],
   [health, "health"],
   [history, "history"],
-  [hobby, "hobby"],
+  [hobby, "art"],
   [humor, "humor"],
   [medicine, "medicine"],
   [music, "music"],
   [myths, "myths"],
-  [pedagogy, "pedagogy"],
-  [psyhology, "psyhology"],
+  [pedagogy, "education"],
+  [psyhology, "self-help"],
   [poetry, "poetry"],
   [scary, "horror"],
   [romance, "romance"],
   [science, "science"],
   [sport, "sport"],
   [tales, "tales"],
-  [technical, "technical"],
+  [technical, "TECHNOLOGY & ENGINEERING"],
   [computers, "computers"],
   [underwater, "ocean"],
 ];
@@ -67,7 +67,7 @@ export const translate: IBook1 = {
   adventure: "приключения",
   animals: "животные",
   biography: "биография",
-  botanic: "ботаника",
+  gardening: "ботаника",
   cars: "автомобили",
   children: "детская литература",
   classic: "классика",
