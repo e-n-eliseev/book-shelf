@@ -35,8 +35,10 @@ export const BookPage: FC<IAuthProps> = ({ authed }) => {
 
     useLayoutEffect(() => {
         dispatch(getCurrentBookInfo({ id: `${params.id}` }));
-        dispatch(getFavouriteBooksInfo());
-        dispatch(getBookCommentsFB(params?.id ? params?.id : ""));
+        if (authed) {
+            dispatch(getFavouriteBooksInfo());
+            dispatch(getBookCommentsFB(params?.id ? params?.id : ""));
+        }
     }, [params.id])
 
 

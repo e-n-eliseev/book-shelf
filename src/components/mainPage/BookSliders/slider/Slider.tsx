@@ -37,10 +37,11 @@ const Slider: FC<ISlider> = ({ category, images, delay }) => {
     return (
         <section className='slider'>
             <h3 className='slider__heading'>
-                Категория:{category}
+                Категория:<br />
+                "{category}"
             </h3>
             <Box sx={{
-                maxWidth: 250,
+                maxWidth: 230,
                 flexGrow: 1,
                 borderRadius: "8px",
                 overflow: "hidden",

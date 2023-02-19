@@ -9,7 +9,7 @@ const ReadBook: FC = () => {
     const params = useParams();
     //переменная для отслеживания состояния загрузки скрипта Google Book Viewer
     const [loaded, setLoaded] = useState(false);
-    const [btnVision, setBtnVision] = useState(true);
+
     //вставка скрипта Google Book Viewer
     useEffect(() => {
         const script = document.createElement('script');
@@ -22,7 +22,6 @@ const ReadBook: FC = () => {
     }, [])
     //запуск скрипта Google Book Viewer, после его полной загрузки загрузится
     const initialize = () => {
-        setBtnVision(false)
         let viewer = new window.google.books.DefaultViewer(canvasRef.current);
         viewer.load(params.id);
     }
@@ -48,11 +47,9 @@ const ReadBook: FC = () => {
             <div className="read-book__content">
                 {loaded
                     ? <div className="read-book__book-wrapper">
-                        {btnVision
-                            ? <button className="read-book__btn" onClick={() => window.location.reload()}>Если книга не отображается, пожалуйста, нажмите для загрузки программы просмотра книги.</button>
-                            : null
-                        }
-                        <div ref={canvasRef} className="read-book__book" ></div>
+                        <div ref={canvasRef} className="read-book__book" >
+                            <button className="read-book__btn" onClick={() => window.location.reload()}>Если книга не отображается, пожалуйста, нажмите для загрузки программы просмотра книги.</button>
+                        </div>
                     </div>
                     : <Loader />
                 }

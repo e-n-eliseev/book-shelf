@@ -52,8 +52,8 @@ export const BooksList: FC<IBookBase> = ({ genre }) => {
     }, [error])
 
     useEffect(() => {
-        if (!books?.length && loading === "idle") navigate(`/`)
-    }, [books?.length, loading])
+        if (!books?.length && loading === "success") navigate(`/`)
+    }, [books?.length])
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
