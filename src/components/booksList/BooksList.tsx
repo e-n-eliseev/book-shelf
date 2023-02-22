@@ -35,7 +35,7 @@ export const BooksList: FC<IBookBase> = ({ genre }) => {
         genre
             ? dispatch(getBooksByGenre({ searchParam: searchName, startIndex: (27 * (page - 1) + 1), sortParam }))
             : dispatch(getBooksBySearchParam({ searchParam: searchName, startIndex: (27 * (page - 1) + 1), sortParam }))
-    }, [])
+    }, [searchName])
 
     useEffect(() => {
         if (!currentPage || currentPage > pages) {
