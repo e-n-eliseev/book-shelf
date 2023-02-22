@@ -51,10 +51,6 @@ export const BooksList: FC<IBookBase> = ({ genre }) => {
         if (error) navigate(`/404`)
     }, [error])
 
-    useEffect(() => {
-        if (!books?.length && loading === "success") navigate(`/`)
-    }, [books?.length])
-
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
         genre
